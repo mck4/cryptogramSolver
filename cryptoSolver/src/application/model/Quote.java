@@ -10,14 +10,14 @@ import java.util.Collections;
 import java.util.Random;
 
 
-public class CryptoQuote {
+public class Quote {
 	String quote;	// Regular, unaltered quote
 	String cryptoQuote; // Encrypted quote
 	String author;		// Author
 	ArrayList<Character> alphaKey = new ArrayList<Character>();		// Shuffled Alphabet
 	char [] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();  // Regular Alphabet
 	
-	public CryptoQuote(String q, String a) {
+	public Quote(String q, String a) {
 		this.quote = q;
 		this.author = a;
 		this.cryptoQuote = encrypt();
