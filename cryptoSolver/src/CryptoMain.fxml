@@ -1,8 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
 
+<AnchorPane minHeight="350.0" minWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <SplitPane dividerPositions="0.29797979797979796" prefHeight="279.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" opacity="0.0" prefHeight="348.0" prefWidth="365.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="277.0" prefWidth="169.0" />
+        </items>
+      </SplitPane>
+      <ImageView fitHeight="348.0" fitWidth="513.0">
+         <image>
+            <Image url="@../notebook_paper.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="115.0" fitWidth="190.0" layoutX="150.0" layoutY="221.0">
+         <image>
+            <Image url="@../images.png" />
+         </image>
+         <viewport>
+            <Rectangle2D height="125.0" minX="29.0" minY="20.0" width="160.0" />
+         </viewport>
+      </ImageView>
+      <ScrollPane pannable="true" prefHeight="350.0" prefWidth="126.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="144.0" />
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
