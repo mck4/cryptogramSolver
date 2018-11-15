@@ -8,12 +8,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Set;
 
 
 public class Quote {
-	String quote;	// Regular, unaltered quote
+	String quote;	    // Regular, unaltered quote
 	String cryptoQuote; // Encrypted quote
 	String author;		// Author
+	int quoteLen;		// length of quote in chars
+	
+	String quoteEasy;
+	ArrayList<Character> quoteEasyHiddenChars = new ArrayList<Character>();
+	String quoteMedium;
+	ArrayList<Character> quoteMediumHiddenChars = new ArrayList<Character>();
+	String quoteHard;
+	ArrayList<Character> quoteHardHiddenChars = new ArrayList<Character>();
+	
 	ArrayList<Character> alphaKey = new ArrayList<Character>();		// Shuffled Alphabet
 	char [] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();  // Regular Alphabet
 	
@@ -21,7 +31,11 @@ public class Quote {
 	public Quote(String q, String a) {
 		this.quote = q;
 		this.author = a;
+		this.quoteLen = q.length();
 		this.cryptoQuote = encrypt();
+		//this.quoteEasy = ();
+		//this.quoteMedium = ();
+		//this.quoteHard = ();
 	}
 
 	// toString
@@ -56,6 +70,25 @@ public class Quote {
 	
 		return encrypt;
 	}
+	
+	// Show only 10
+	public String toEasy(){
+		String [] quoteChArr = this.quote.split("");
+		
+		return "";
+	}
+	
+	// Show only five
+	public String toMedium(){
+		return "";
+	}
+
+	// Show only two
+	public String toHard(){
+		return "";
+	}
+	
+	//public int selectChar
 	
 	// Getters and Setters
 	
