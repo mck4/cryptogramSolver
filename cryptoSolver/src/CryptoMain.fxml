@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
@@ -7,32 +8,99 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane minHeight="350.0" minWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane minHeight="400.0" minWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.29797979797979796" prefHeight="279.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" opacity="0.0" prefHeight="348.0" prefWidth="365.0" />
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="277.0" prefWidth="169.0" />
-        </items>
-      </SplitPane>
-      <ImageView fitHeight="348.0" fitWidth="513.0">
+      <ImageView fitHeight="400.0" fitWidth="671.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../notebook_paper.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="115.0" fitWidth="190.0" layoutX="150.0" layoutY="221.0">
+      <SplitPane dividerPositions="0.242152466367713" prefHeight="400.0" prefWidth="671.0" style="-fx-background-color: tansparent;" stylesheets="@../crypto.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="159.0">
+               <children>
+                  <ComboBox layoutY="-1.0" prefHeight="28.0" prefWidth="159.0" promptText="Select Difficulty" visibleRowCount="3" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="504.0" />
+        </items>
+      </SplitPane>
+      <ImageView fitHeight="110.0" fitWidth="190.0" layoutX="194.0" layoutY="277.0" preserveRatio="true">
          <image>
             <Image url="@../images.png" />
          </image>
          <viewport>
-            <Rectangle2D height="125.0" minX="29.0" minY="20.0" width="160.0" />
+            <Rectangle2D height="123.0" minX="29.0" minY="20.0" width="236.0" />
          </viewport>
       </ImageView>
-      <ScrollPane pannable="true" prefHeight="350.0" prefWidth="126.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane layoutY="23.0" pannable="true" prefHeight="377.0" prefWidth="160.0" vmax="40.0" vvalue="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="347.0" prefWidth="144.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="379.0" prefWidth="155.0">
+               <children>
+                  <Label layoutX="-5.0" layoutY="22.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #B8860b;" text="Puzzle #1 &#10;Andrew W. Mathis" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="33.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #2 &#10;Bill Waterson" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="66.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #3 &#10;Bono">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="99.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #4 &#10;David Allen">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="132.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #5 &#10;Dr. Edwards Deming">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="165.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #6 &#10;Ernest Hemingway">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="198.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #7 &#10;Gustave Flaubert">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="231.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #8 &#10;Jean Giraudoux">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="264.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #9&#10;Jerome Blattner">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="297.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #10 &#10;Jimmy Buffet">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutY="330.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #11&#10;Jimmy Buffet">
+                     <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+                     </padding>
+                  </Label>
+               </children></AnchorPane>
         </content>
       </ScrollPane>
+      <TextArea editable="false" layoutX="194.0" layoutY="277.0" prefHeight="99.0" prefWidth="190.0" promptText="Blah" stylesheets="@../crypto.css" text="Blah">
+         <font>
+            <Font name="Chiller" size="24.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TextArea>
    </children>
 </AnchorPane>
