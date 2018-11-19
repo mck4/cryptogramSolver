@@ -15,7 +15,7 @@
             <Image url="@../notebook_paper.jpg" />
          </image>
       </ImageView>
-      <SplitPane dividerPositions="0.242152466367713" prefHeight="400.0" prefWidth="671.0" style="-fx-background-color: tansparent;" stylesheets="@../crypto.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+      <SplitPane dividerPositions="0.242152466367713" prefHeight="400.0" prefWidth="671.0" style="-fx-background-color: transparent;" stylesheets="@../crypto.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="159.0">
                <children>
