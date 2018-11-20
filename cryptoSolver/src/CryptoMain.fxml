@@ -28,24 +28,24 @@
                         </AnchorPane>
                       <AnchorPane layoutY="30.0">
                            <children>
-                              <ScrollPane fitToWidth="true" vbarPolicy="ALWAYS" vmax="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane fitToWidth="true" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
                                     <VBox prefHeight="500.0">
                                        <children>
-                                          <Label maxWidth="140.0" prefHeight="33.0" prefWidth="140.0" style="-fx-border-color: #B8860b;" text="Puzzle #1 &#10;Andrew W. Mathis" VBox.vgrow="SOMETIMES">
+                                          <Label maxWidth="150.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #B8860b;" text="Puzzle #1 &#10;Andrew W. Mathis" VBox.vgrow="SOMETIMES">
                                              <padding>
                                                 <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
                                              </padding>
                                              <VBox.margin>
-                                                <Insets bottom="3.0" />
+                                                <Insets />
                                              </VBox.margin>
                                           </Label>
-                                          <Label prefHeight="33.0" prefWidth="140.0" style="-fx-border-color: #b8860b;" text="Puzzle #2 &#10;Bill Waterson" VBox.vgrow="SOMETIMES">
+                                          <Label prefHeight="33.0" prefWidth="150.0" style="-fx-border-color: #b8860b;" text="Puzzle #2 &#10;Bill Waterson" VBox.vgrow="SOMETIMES">
                                              <padding>
                                                 <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
                                              </padding>
                                           </Label>
-                                          <Label prefHeight="33.0" prefWidth="140.0" style="-fx-border-color: #b8860b;" text="Puzzle #3 &#10;Bono">
+                                          <Label prefHeight="33.0" prefWidth="150.0" style="-fx-border-color: #b8860b;" text="Puzzle #3 &#10;Bono">
                                              <padding>
                                                 <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
                                              </padding>
