@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="400.0" minWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="400.0" minWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.CryptoMainController">
    <children>
       <ImageView fitHeight="400.0" fitWidth="671.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
@@ -30,73 +30,7 @@
                            <children>
                               <ScrollPane fitToWidth="true" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
-                                    <VBox prefHeight="500.0">
-                                       <children>
-                                          <Label maxWidth="150.0" prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #B8860b;" text="Puzzle #1 &#10;Andrew W. Mathis" VBox.vgrow="SOMETIMES">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="150.0" style="-fx-border-color: #b8860b;" text="Puzzle #2 &#10;Bill Waterson" VBox.vgrow="SOMETIMES">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="150.0" style="-fx-border-color: #b8860b;" text="Puzzle #3 &#10;Bono">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #4 &#10;David Allen">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #5 &#10;Dr. Edwards Deming">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #6 &#10;Ernest Hemingway">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #7 &#10;Gustave Flaubert">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #8 &#10;Jean Giraudoux">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #9&#10;Jerome Blattner">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #10 &#10;Jimmy Buffet">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label prefHeight="33.0" prefWidth="155.0" style="-fx-border-color: #b8860b;" text="Puzzle #11&#10;Jimmy Buffet">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label maxWidth="143.0" prefHeight="33.0" prefWidth="143.0" style="-fx-border-color: #B8860b;" text="Puzzle #1 &#10;Andrew W. Mathis">
-                                             <padding>
-                                                <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                                             </padding>
-                                          </Label>
-                                       </children>
-                                    </VBox>
+                                    <VBox fx:id="puzzles" prefHeight="1330.0" />
                                  </content>
                               </ScrollPane>
                            </children>

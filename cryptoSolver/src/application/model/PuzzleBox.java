@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class PuzzleBox {
 	ArrayList<Quote> quotePuzzles = new ArrayList<Quote>();
+	ArrayList<Word> dictionary = new ArrayList<Word>();
 
 	// Constructor
 	public PuzzleBox(String filename) {
