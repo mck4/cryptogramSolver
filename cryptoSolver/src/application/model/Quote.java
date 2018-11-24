@@ -54,7 +54,7 @@ public class Quote {
 		return "\"" + this.quote +  "\"" + " -" + this.author + "\n" + "\"" + this.cryptoQuote + "\"";
 	}
 	
-	/** toString **/
+	/** toString; displays detailed information about the quote **/
 	public String toString() {
 		StringBuilder ret = new StringBuilder("");
 		ret.append("String quote: " + this.quote + "\n");

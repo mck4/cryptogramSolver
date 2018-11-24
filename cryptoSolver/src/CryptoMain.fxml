@@ -23,7 +23,7 @@
                     <items>
                       <AnchorPane maxHeight="28.0" minHeight="0.0" minWidth="0.0" prefHeight="28.0" prefWidth="158.0">
                            <children>
-                              <ComboBox prefHeight="28.0" prefWidth="159.0" promptText="Select Difficulty" visibleRowCount="3" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <ComboBox fx:id="choices" onAction="#cbxChoice" prefHeight="28.0" prefWidth="159.0" promptText="Select Difficulty" visibleRowCount="3" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane layoutY="30.0">
@@ -38,7 +38,41 @@
                     </items>
                   </SplitPane>
                </children></AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="556.0" prefWidth="504.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="556.0" prefWidth="504.0">
+               <children>
+                  <Label fx:id="displaynum" layoutX="56.0" layoutY="18.0" prefHeight="45.0" prefWidth="380.0" text="PUZZLE #" wrapText="true">
+                     <font>
+                        <Font name="Consolas" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="display" layoutX="56.0" layoutY="79.0" prefHeight="45.0" prefWidth="380.0" text="(PUZZLE)" wrapText="true">
+                     <font>
+                        <Font name="Consolas" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="displaycrypto" layoutX="56.0" layoutY="101.0" prefHeight="45.0" prefWidth="380.0" text="(CRYPTO)" wrapText="true">
+                     <font>
+                        <Font name="Consolas" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="displayauthor" alignment="CENTER_RIGHT" layoutX="56.0" layoutY="186.0" prefHeight="45.0" prefWidth="380.0" text="(AUTHOR)" textAlignment="JUSTIFY" wrapText="true">
+                     <font>
+                        <Font name="Consolas" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children></AnchorPane>
         </items>
       </SplitPane>
       <ImageView fitHeight="110.0" fitWidth="190.0" layoutX="194.0" layoutY="277.0" preserveRatio="true">
@@ -49,7 +83,7 @@
             <Rectangle2D height="123.0" minX="29.0" minY="20.0" width="236.0" />
          </viewport>
       </ImageView>
-      <TextArea editable="false" layoutX="194.0" layoutY="277.0" prefHeight="99.0" prefWidth="190.0" promptText="Blah" stylesheets="@../crypto.css" text="Blah">
+      <TextArea fx:id="postitnote" editable="false" layoutX="194.0" layoutY="277.0" prefHeight="99.0" prefWidth="190.0" promptText="Blah" stylesheets="@../crypto.css" text="Blah">
          <font>
             <Font name="Chiller" size="24.0" />
          </font>
