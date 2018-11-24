@@ -11,7 +11,7 @@ public class Dictionary {
 									  "OF", "ON", "OR", "SO", "TO", "UP", "US", "WE"};
 	final String [] mostFrequentLetters = {"E", "T", "A", "O", "I", "N"};
 	final String [] contractionEnds = {"T", "S", "D", "M", "RE", "VE", "LL"};
-	//Arraylist<String> oneLetterWords = new ArrayList<String>(A, I);
+	 
 	ArrayList<Word> vocabulary = new ArrayList<Word>();
 	
 	public Dictionary(ArrayList<Word> vocab) {

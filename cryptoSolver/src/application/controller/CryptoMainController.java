@@ -7,6 +7,7 @@ import java.util.Arrays;
 import application.model.Dictionary;
 import application.model.PuzzleBox;
 import application.model.Quote;
+import application.model.Solver;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,7 +30,8 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	
 	@FXML private ComboBox<String> choices;
 
-	public static Quote currentQ;   
+	public static Quote currentQ;  
+	public static Solver solver;
 	
 	ArrayList<String> comboBoxChoices = new ArrayList<String>();
 
@@ -47,6 +49,9 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 		
 		// Load dictionary & add vocab from the puzzles
 		Dictionary dictionary = new Dictionary(Dictionary.getVocabulary(puzzlebox.getQuotePuzzles()));
+		
+		// Generate Solver
+		solver = new Solver(dictionary);
 		
 		
 		// Adds the buttons linking to the puzzles dynamically
@@ -106,7 +111,8 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	/** Method to handle ... **/
 	@Override
 	public void handle(ActionEvent event) {
-
+		System.out.println("Pressy");
+		solver.checkforOneLetterWords(currentQ);
 	}
 	
 	

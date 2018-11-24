@@ -21,20 +21,25 @@ public class Quote {
 	String author;		// Author
 	int quoteLen;		// length of quote in chars
 	
+	// Easy
 	String qEasy;
-	String qEasyCrypto;
 	ArrayList<Character> easyHidden = new ArrayList<Character>();
+	// Medium
 	String qMed;
 	ArrayList<Character> medHidden = new ArrayList<Character>();
+	// Hard
 	String qHard;
 	ArrayList<Character> hardHidden = new ArrayList<Character>();
 	
 	// Letter to its frequency; sorted by least freq
 	Map<Character, Integer> charFreq = new LinkedHashMap<Character, Integer>(); 
 	
-	// Key; sorted alphabetically
+	// Key; first is sorted alphabetically
 	Map<Character, Character> alphaToCrypto = new LinkedHashMap<Character, Character>(); 
 	Map<Character, Character> cryptoToAlpha = new LinkedHashMap<Character, Character>(); 
+	
+	// The individual words in the quote
+	ArrayList<Word> words = new ArrayList<Word>();
 	
 	
 	/**  Constructor **/
@@ -45,7 +50,8 @@ public class Quote {
 		this.cryptoQuote = encrypt();
 		
 		findCharFreq();
-		
+		collectWords();
+		 
 		this.qEasy = toEasy();
 		this.qMed = toMedium();
 		this.qHard = toHard();
@@ -75,16 +81,53 @@ public class Quote {
 		return ret.toString();
 	}
 	
-	public String updateEasy(char newCh) {
-		char [] chArr = this.qEasy.toCharArray();
-		char trying = cryptoToAlpha.get(newCh);
-		System.out.println(trying);
-		//TODO: add a character to 
+	public static String updatePuzzle(char ans, char crypto, Quote q) {
+		char [] chArr = q.quote.toCharArray();
+		for(int i=0; i < q.quoteLen; i++) {
+			if(chArr[i] == crypto){
+				chArr[i] = ans;
+			}
+		}
 		
-		return "";
-		
+		System.out.println(chArr);
+		return chArr.toString();
+
 	}
-	
+
+	public void collectWords() {
+		// Deal directly with Strings first
+		ArrayList<String> strV = new ArrayList<String>();
+		String [] tokens = this.quote.split(" ");
+		
+		// Get rid of unnecessary punctuation
+		for(int i = 0; i < tokens.length; i++) {
+			tokens[i] = tokens[i].replaceAll("[,?!.;\"]", "");
+			// Only add the word if it's unique 
+			if(!strV.contains(tokens[i]))
+				strV.add(tokens[i]);
+		}
+		
+		// Build Word AL
+		for(String w: strV){
+			Word word = new Word(w);
+			words.add(word);
+		}
+	}
+
+	public Character alphaOf(char crypto){
+
+		char ret = this.cryptoToAlpha.get(crypto);
+
+		return ret;
+	}
+
+	public Character cryptoOf(char letter){
+
+		char ret = this.alphaToCrypto.get(letter);
+
+		return ret;
+	}
+
 	/** Encrypts the quote; should only be used once; gives alphaToCrypto its value **/
 	public String encrypt(){
 		ArrayList<Character> alphaKey = new ArrayList<Character>();		// Shuffled Alphabet will go here
@@ -260,6 +303,14 @@ public class Quote {
 	
 	// Getters and Setters
 
+	public Map<Character, Character> getCryptoToAlpha() {
+		return cryptoToAlpha;
+	}
+
+	public ArrayList<Word> getWords() {
+		return words;
+	}
+
 	public String getQuote() {
 		return quote;
 	}
@@ -307,6 +358,15 @@ public class Quote {
 	public Map<Character, Character> getAlphaToCrypto() {
 		return alphaToCrypto;
 	}
+	
+	public void setCryptoToAlpha(Map<Character, Character> cryptoToAlpha) {
+		this.cryptoToAlpha = cryptoToAlpha;
+	}
+
+	public void setWords(ArrayList<Word> words) {
+		this.words = words;
+	}
+
 
 	public void setQuote(String quote) {
 		this.quote = quote;

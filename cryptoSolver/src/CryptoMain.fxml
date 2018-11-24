@@ -72,6 +72,11 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
+                  <Button layoutX="315.0" layoutY="319.0" mnemonicParsing="false" onAction="#handle" text="Next &gt;&gt;">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Button>
                </children></AnchorPane>
         </items>
       </SplitPane>
