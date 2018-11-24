@@ -22,6 +22,7 @@ public class Quote {
 	int quoteLen;		// length of quote in chars
 	
 	String qEasy;
+	String qEasyCrypto;
 	ArrayList<Character> easyHidden = new ArrayList<Character>();
 	String qMed;
 	ArrayList<Character> medHidden = new ArrayList<Character>();
@@ -32,7 +33,8 @@ public class Quote {
 	Map<Character, Integer> charFreq = new LinkedHashMap<Character, Integer>(); 
 	
 	// Key; sorted alphabetically
-	Map<Character, Character> qKey = new LinkedHashMap<Character, Character>(); 
+	Map<Character, Character> alphaToCrypto = new LinkedHashMap<Character, Character>(); 
+	Map<Character, Character> cryptoToAlpha = new LinkedHashMap<Character, Character>(); 
 	
 	
 	/**  Constructor **/
@@ -61,7 +63,7 @@ public class Quote {
 		ret.append("String author: " + this.author + "\n");
 		ret.append("int quoteLen: " + this.quoteLen + "\n");
 		ret.append("Map<Character, Integer> charFreq: \n" + this.charFreq + "\n");
-		ret.append("Map<Character, Character> qKey: \n" + this.qKey + "\n");
+		ret.append("Map<Character, Character> alphaToCrypto: \n" + this.alphaToCrypto + "\n");
 		ret.append("String cryptoQuote: " + this.cryptoQuote + "\n");
 		ret.append("String qEasy: " + this.qEasy + "\n");
 		ret.append("String easyHidden: " + this.easyHidden + "\n");
@@ -73,7 +75,17 @@ public class Quote {
 		return ret.toString();
 	}
 	
-	/** Encrypts the quote; should only be used once; gives qKey its value **/
+	public String updateEasy(char newCh) {
+		char [] chArr = this.qEasy.toCharArray();
+		char trying = cryptoToAlpha.get(newCh);
+		System.out.println(trying);
+		//TODO: add a character to 
+		
+		return "";
+		
+	}
+	
+	/** Encrypts the quote; should only be used once; gives alphaToCrypto its value **/
 	public String encrypt(){
 		ArrayList<Character> alphaKey = new ArrayList<Character>();		// Shuffled Alphabet will go here
 		char [] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();  // Regular Alphabet
@@ -87,17 +99,22 @@ public class Quote {
 		// Get length of quote
 		int len = encryptCharArr.length;
 
-		// Maps letters to their encrypted versions; sorted alphabetically; qKey given its values
+		// Maps letters to their encrypted versions; sorted alphabetically; alphaToCrypto given its values
 		for(int j = 0; j < alphabet.length; j++) {
 			int indx = alphaKey.indexOf(Character.valueOf(alphabet[j]));
-			this.qKey.put(alphabet[j], alphabet[indx]);
+			this.alphaToCrypto.put(alphabet[j], alphabet[indx]);
 		}
-		
+
+		// Maps letters to their encrypted versions; sorted alphabetically; alphaToCrypto given its values
+		for(Character key: alphaToCrypto.keySet()) {
+			this.cryptoToAlpha.put(alphaToCrypto.get(key), key);
+		}
+
 		// Get encrypted version of quote
 		for(int i = 0; i < len; i++) {
 			// If this character is a letter, modify
 			if(Character.isLetter(this.quote.charAt(i))) {
-				encryptCharArr[i] = qKey.get(this.quote.charAt(i));
+				encryptCharArr[i] = alphaToCrypto.get(this.quote.charAt(i));
 			}	
 		}
 
@@ -287,8 +304,8 @@ public class Quote {
 		return charFreq;
 	}
 
-	public Map<Character, Character> getqKey() {
-		return qKey;
+	public Map<Character, Character> getAlphaToCrypto() {
+		return alphaToCrypto;
 	}
 
 	public void setQuote(String quote) {
@@ -335,7 +352,7 @@ public class Quote {
 		this.charFreq = charFreq;
 	}
 
-	public void setqKey(Map<Character, Character> qKey) {
-		this.qKey = qKey;
+	public void setAlphaToCrypto(Map<Character, Character> alphaToCrypto) {
+		this.alphaToCrypto = alphaToCrypto;
 	}
 }

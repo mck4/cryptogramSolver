@@ -88,9 +88,11 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 		String difficulty = choices.getSelectionModel().selectedItemProperty().getValue();
 		if(difficulty.equals("Easy")) {
 			display.setText(currentQ.getqEasy());
+			
 		}
 		else if (difficulty.equals("Medium")){
 			display.setText(currentQ.getqMed());
+			//currentQ.updateEasy('X');
 		}
 		else if (difficulty.equals("Hard")){
 			display.setText(currentQ.getqHard());

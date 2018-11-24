@@ -30,7 +30,7 @@
                            <children>
                               <ScrollPane fitToWidth="true" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
-                                    <VBox fx:id="puzzles" prefHeight="1330.0" />
+                                    <VBox fx:id="puzzles" prefHeight="680.0" />
                                  </content>
                               </ScrollPane>
                            </children>
@@ -40,7 +40,7 @@
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="556.0" prefWidth="504.0">
                <children>
-                  <Label fx:id="displaynum" layoutX="56.0" layoutY="18.0" prefHeight="45.0" prefWidth="380.0" text="PUZZLE #" wrapText="true">
+                  <Label fx:id="displaynum" layoutX="56.0" layoutY="18.0" prefHeight="45.0" prefWidth="380.0" text="Select a puzzle!" wrapText="true">
                      <font>
                         <Font name="Consolas" size="14.0" />
                      </font>
@@ -48,7 +48,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="display" layoutX="56.0" layoutY="79.0" prefHeight="45.0" prefWidth="380.0" text="(PUZZLE)" wrapText="true">
+                  <Label fx:id="display" layoutX="56.0" layoutY="79.0" prefHeight="45.0" prefWidth="380.0" wrapText="true">
                      <font>
                         <Font name="Consolas" size="14.0" />
                      </font>
@@ -56,7 +56,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="displaycrypto" layoutX="56.0" layoutY="101.0" prefHeight="45.0" prefWidth="380.0" text="(CRYPTO)" wrapText="true">
+                  <Label fx:id="displaycrypto" layoutX="56.0" layoutY="101.0" prefHeight="45.0" prefWidth="380.0" wrapText="true">
                      <font>
                         <Font name="Consolas" size="14.0" />
                      </font>
@@ -64,7 +64,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="displayauthor" alignment="CENTER_RIGHT" layoutX="56.0" layoutY="186.0" prefHeight="45.0" prefWidth="380.0" text="(AUTHOR)" textAlignment="JUSTIFY" wrapText="true">
+                  <Label fx:id="displayauthor" alignment="CENTER_RIGHT" layoutX="56.0" layoutY="186.0" prefHeight="45.0" prefWidth="380.0" textAlignment="JUSTIFY" wrapText="true">
                      <font>
                         <Font name="Consolas" size="14.0" />
                      </font>
