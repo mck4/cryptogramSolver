@@ -38,8 +38,9 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	public static Dictionary dictionary;
 	public static int difficultyMode = easy; // 1 - Easy, 2 - Medium, 3 - Hard
 	
-	//
-	int checkForFilledInOne = 0;
+	// Counts
+	int checkForFilledInOne = 0, checkForFilledInOneCount = -1;
+	int checkforFilledInOneAndNeighbors = 0, checkforFilledInOneAndNeighborsCount = -1;
 	
 	ArrayList<String> comboBoxChoices = new ArrayList<String>();
 
@@ -90,6 +91,9 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 											display.setText(solver.getCurrSolution());
 											displaycrypto.setText(q.getCryptoQuote());
 											displayauthor.setText(q.getAuthor());
+											// Reset
+											checkForFilledInOneCount = -1;
+											checkforFilledInOneAndNeighborsCount = -1;
 											// Set as current Quote
 											currentQ = q; });
 			// Add button to display
@@ -138,14 +142,35 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	/** Method to handle ... **/
 	@Override
 	public void handle(ActionEvent event) {
+		if(solver == null)
+			return;
 		
-		//System.out.println("Pressy");
-		checkForFilledInOne = solver.checkforFilledInOne();
-		display.setText(solver.getCurrSolution());
+		if(checkForFilledInOneCount < checkForFilledInOne ) {
+			checkForFilledInOne = solver.checkforFilledInOne();
+			
+			checkForFilledInOneCount++;  // Increment
+			
+			// Update displays
+			display.setText(solver.getCurrSolution());
+			postitnote.setText("Here we check for words with one blank, compare with our dictionary and find only 1 solution possible, prioritizing larger words " + checkForFilledInOne + " time(s).");
+			
 		
-		postitnote.setText("Here we check for words with only 1 solution possible, prioritizing larger words " + checkForFilledInOne + " time(s).");
-		//System.out.println(solver.getCurrSolution());
-		
+		}
+		else if (checkforFilledInOneAndNeighborsCount < checkforFilledInOneAndNeighbors ) {
+			checkforFilledInOneAndNeighbors = solver.checkforFilledInOneAndNeighbors();
+			
+			checkforFilledInOneAndNeighborsCount++; // Increment
+			
+			// Update displays
+			display.setText(solver.getCurrSolution());
+			postitnote.setText("Again check for words with one blank, and consider words with multiple solutions but narrow down the solutions looking at neighboring chars " + checkforFilledInOneAndNeighbors + " time(s).");
+	
+		}
+		else {
+			// reset
+			checkforFilledInOneAndNeighborsCount = 0;
+			checkForFilledInOneCount = 0;
+		}
 	}
 	
 	

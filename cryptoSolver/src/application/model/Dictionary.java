@@ -62,7 +62,7 @@ public class Dictionary {
 				threeLetterWords.add(w);
 		}
 		Collections.sort(threeLetterWords);
-		System.out.println(threeLetterWords);
+		//System.out.println(threeLetterWords);
 	}
 
 	public String[] getOneLetterWords() {

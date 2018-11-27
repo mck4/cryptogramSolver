@@ -9,9 +9,11 @@ public class Solver {
 	Quote currQ;	     // The current puzzle 
 	String currSolution; // Current solution so far (not filled) *Needs to be updated each time*
 	int currDifficulty;  // Current difficulty
+	ArrayList<String> charsFound = new ArrayList<String>();
 	
 	// counters
 	int checkforFilledInOneCount;
+	int checkforFilledInAndNeighborsCount;
 	
 	// Copies from currQ
 	ArrayList<String> cryptoWords = new ArrayList<String>();  // Cryptotext beneath the quote
@@ -41,43 +43,53 @@ public class Solver {
 			this.hiddenTokens = (ArrayList<String>) q.getHardWordsHidden().clone();
 		}
 		
+		collectCharsFound(this.currSolution);
+		
 	}
 	
-	/** Check for one-letter words
-	public void checkforOneLetterWords(int difficulty) {
+	public void collectCharsFound(String current){
 		
-		for(Word w: currQ.getWords()) {
-			if (w.getWord().length() == 1) {
-				char temp = w.getWord().charAt(0);
-				char crypto = currQ.cryptoOf(temp);
-				String trying = Quote.updatePuzzle('A', crypto, currQ, difficulty);
-				System.out.println(trying);
+		for(char chara: current.toCharArray()){
+			if(Character.isLetter(chara)){
+				if(!charsFound.contains(String.valueOf(chara)))
+					charsFound.add(String.valueOf(chara));
 			}
 		}
-	} **/
+		
+	}
 	
 	/** Find letters that are mostly filled in (ie all but 1 spaces) 
 	 * Compare with dictionary, find one that matches all chars but one**/
 	public int checkforFilledInOne() {
+		// Match found flag
 		boolean foundAMatch = false;
-		System.out.println(hiddenTokens);
+		
 		// For each token 
-		for(String s: this.hiddenTokens) {
+		for(String s: this.hiddenTokens) {			
+			// Break when the first match is found
 			if(foundAMatch)
 				break;
-			int matchesFound = 0; // Should be one
-			String matchStr = "";
-			// Convert to char array
-			char [] charas = s.toCharArray();
-			int count = 0;
 			
-			// Count empty spaces
-			for(char c: charas){
+			// Keep track of # of matches found; here it should just be one
+			int matchesFound = 0; 
+			
+			// Our matched string will go here
+			String matchStr = "";
+			
+			// Convert token to char array
+			char [] charas = s.toCharArray();
+			
+			// Count empty spaces in token
+			int count = 0;
+			for(char c: charas) {
 				if(c == '_')
 					count++;
 			}
+			
 			// This word is mostly filled out so let's narrow it down
 			if( count == 1 ) {
+				
+				// Compare current word to our dictionary
 				for(Word w: this.dict.getVocabulary()) {
 					
 					// If this word is the same length...
@@ -97,9 +109,8 @@ public class Solver {
 						
 						// An almost perfect match is found
 						if(numToMatch == matchCount) {
-							matchStr = w.getWord();
-							matchesFound++;
-							//System.out.println(matchesFound);
+							matchStr = w.getWord(); // Get the matched word
+							matchesFound++;		    // Increment for each possible match found
 						}							
 					}
 				}
@@ -115,27 +126,150 @@ public class Solver {
 				int posOfChar = 0;
 				int posOfWord = this.hiddenTokens.indexOf(s);
 				
-				//System.out.println("Match found! word: "+ matchStr + "; str: " + s);
+				// Find the blank
 				for(int i = 0; i < s.length(); i++) {
 					foundAMatch = true;
 					if(s.charAt(i) == '_') {
-						posOfChar = i;
-						ans = matchStr.charAt(i);
-						crypto = this.cryptoWords.get(posOfWord).charAt(posOfChar);
+						posOfChar = i;												  // Get position in word
+						crypto = this.cryptoWords.get(posOfWord).charAt(posOfChar);   // Get corresponding crypto
+						ans = matchStr.charAt(i);	// Get letter answer
 					}
 				}
-				//System.out.println(ans + " " + crypto + " " );
+				
+				/* UPDATES WHEN ANSWER FOUND */
 				
 				// Update current solution
 				this.currSolution = Quote.updatePuzzle(ans, crypto, currQ, currSolution);
-				checkforFilledInOneCount++;
 				// Update hiddenTokens
 				updateHiddenTokens();
+				// Update chars found
+				collectCharsFound(this.currSolution);
+				
+				checkforFilledInOneCount++; // Increment
+				
 				System.out.println(this.currSolution);
 			}	
 		}
 
 		return this.checkforFilledInOneCount;
+	}
+	
+	/** Find letters that are mostly filled in (ie all but 1 spaces) 
+	 * Compare with dictionary, find one that matches all chars but one
+	 * Accepts multiple matches and narrows it down by checking neighbors **/
+	public int checkforFilledInOneAndNeighbors() {
+		// Match found flag
+		boolean foundAMatch = false;
+		
+		// For each token 
+		for(String s: this.hiddenTokens) {			
+			// Break when the first match is found
+			if(foundAMatch)
+				break;
+			
+			// Keep track of # of matches found; here it should just be one
+			int matchesFound = 0; 
+			
+			// Our matched strings will go here **USES AN ARRAYLIST**
+			ArrayList<String> matchStrs = new ArrayList<String>();
+			ArrayList<String> matchNarrow = new ArrayList<String>();
+			
+			// Convert token to char array
+			char [] charas = s.toCharArray();
+			
+			// Count empty spaces in token
+			int count = 0;
+			for(char c: charas) {
+				if(c == '_')
+					count++;
+			}
+			
+			// This word is mostly filled out so let's narrow it down
+			if( count == 1 ) {
+				
+				// Compare current word to our dictionary
+				for(Word w: this.dict.getVocabulary()) {
+					
+					// If this word is the same length...
+					if(s.length() == w.getWordLen()) {
+						
+						// A match is found if numToMatch and matchCount are the same
+						int numToMatch = s.length() - 1; 
+						int matchCount = 0;
+						
+						// Look for words that might be a match
+						for(int i = 0; i < s.length(); i++) {
+							if(s.charAt(i) == w.getWord().charAt(i)){
+								//System.out.println("s: " + s.charAt(i) + "; w: " + w.getWord().charAt(i));
+								matchCount++;
+							}
+						}
+						
+						// An almost perfect match is found
+						if(numToMatch == matchCount) {
+							matchStrs.add(w.getWord()); // Get the matched word, add to AL
+						}							
+					}
+				}
+			}
+			if(!matchStrs.isEmpty()) {
+				// Characters go here
+				char ans = ' ';
+				char crypto = ' ';
+				
+				// Indexes go here
+				int posOfChar = 0;
+				int posOfWord = this.hiddenTokens.indexOf(s);
+				
+				//System.out.println(matchesFound);
+				//System.out.println(matchStrs);
+				//System.out.println(s);
+				//System.out.println(charsFound);
+				
+				
+				// Find the blank
+				for(int i = 0; i < s.length(); i++) {
+					foundAMatch = true;
+					if(s.charAt(i) == '_') {
+						posOfChar = i;												  // Get position in word
+						crypto = this.cryptoWords.get(posOfWord).charAt(posOfChar);   // Get corresponding crypto
+					}
+				}
+				
+				// Iterate through matched Strings and narrow down
+				for(String m: matchStrs) {
+					// Get possible ans character from current matching word
+					ans = m.charAt(posOfChar);
+					
+					// If the current character is in the list of characters found...
+					if(charsFound.contains(String.valueOf(ans)))
+						continue;			// This word is not a possible solution since the possible ans is already in the quote
+					else 
+						matchNarrow.add(m);	// If not, this is a possible candidate
+				}
+				
+				System.out.println(matchNarrow);
+				
+				// There is only one possible solution!
+				if(matchNarrow.size() == 1) {
+					// Get letter answer
+					ans = matchNarrow.get(0).charAt(posOfChar);
+					
+					/* UPDATES WHEN ANSWER FOUND */
+					
+					// Update current solution
+					this.currSolution = Quote.updatePuzzle(ans, crypto, currQ, currSolution);
+					// Update hiddenTokens
+					updateHiddenTokens();
+					// Update chars found
+					collectCharsFound(this.currSolution);
+					checkforFilledInAndNeighborsCount++;
+				}
+			}
+			
+		}
+
+		return this.checkforFilledInAndNeighborsCount;
 	}
 	
 	public void updateHiddenTokens() {
