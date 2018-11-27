@@ -1,6 +1,8 @@
+/** Word.java **/
+
 package application.model;
 
-public class Word {
+public class Word implements Comparable<Word> {
 	
 	String word;
 	int wordLen;
@@ -16,6 +18,13 @@ public class Word {
 	public String toString(){
 		return word;
 	}
+	
+	@Override
+	public int compareTo(Word w) 
+	{ 
+		return this.getWord().compareTo(w.getWord()); 
+	} 
+	
 
 	public String getWord() {
 		return word;
@@ -32,6 +41,7 @@ public class Word {
 	public void setWordLen(int wordLen) {
 		this.wordLen = wordLen;
 	}
+	
 	
 	
 

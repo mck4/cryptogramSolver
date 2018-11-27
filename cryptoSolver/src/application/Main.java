@@ -1,6 +1,7 @@
 /** Main.java **/
 
-/** Cryptogram Solver by 
+/** 
+ * Cryptogram Solver by 
  * Zoey Abrigo & Carolina Kimbrough
  */
 package application;

@@ -1,6 +1,4 @@
-/* Quote Class:
- * For quotes, their authors and their cryptoquote
- */
+/** Quote.java **/
 
 package application.model;
 
@@ -23,13 +21,16 @@ public class Quote {
 	
 	// Easy
 	String qEasy;
-	ArrayList<Character> easyHidden = new ArrayList<Character>();
+	ArrayList<Character> easyHidden = new ArrayList<Character>();	// Hidden chars
+	ArrayList<String> easyWordsHidden = new ArrayList<String>();	// tokens of Crypto words
 	// Medium
 	String qMed;
-	ArrayList<Character> medHidden = new ArrayList<Character>();
+	ArrayList<Character> medHidden = new ArrayList<Character>();	// Hidden chars
+	ArrayList<String> medWordsHidden = new ArrayList<String>();		// tokens of Crypto words
 	// Hard
 	String qHard;
-	ArrayList<Character> hardHidden = new ArrayList<Character>();
+	ArrayList<Character> hardHidden = new ArrayList<Character>();	// Hidden chars
+	ArrayList<String> hardWordsHidden = new ArrayList<String>();	// tokens of Crypto words
 	
 	// Letter to its frequency; sorted by least freq
 	Map<Character, Integer> charFreq = new LinkedHashMap<Character, Integer>(); 
@@ -40,9 +41,10 @@ public class Quote {
 	
 	// The individual words in the quote
 	ArrayList<Word> words = new ArrayList<Word>();
+	ArrayList<String> cryptoWords = new ArrayList<String>();
 	
 	
-	/**  Constructor **/
+	/**  Constructor  **/
 	public Quote(String q, String a) {
 		this.quote = q;
 		this.author = a;
@@ -55,6 +57,8 @@ public class Quote {
 		this.qEasy = toEasy();
 		this.qMed = toMedium();
 		this.qHard = toHard();
+		//System.out.println(easyHidden);
+		//System.out.println(qEasy);
 	}
 
 	/** Method to print the quote **/
@@ -64,7 +68,9 @@ public class Quote {
 	
 	/** toString; displays detailed information about the quote **/
 	public String toString() {
+		
 		StringBuilder ret = new StringBuilder("");
+		
 		ret.append("String quote: " + this.quote + "\n");
 		ret.append("String author: " + this.author + "\n");
 		ret.append("int quoteLen: " + this.quoteLen + "\n");
@@ -81,55 +87,76 @@ public class Quote {
 		return ret.toString();
 	}
 	
-	public static String updatePuzzle(char ans, char crypto, Quote q) {
-		char [] chArr = q.quote.toCharArray();
-		for(int i=0; i < q.quoteLen; i++) {
-			if(chArr[i] == crypto){
-				chArr[i] = ans;
+	/** Class method **/
+	public static String updatePuzzle(char posAns, char crypto, Quote q, String str) {
+		char [] chArrPlain = str.toCharArray();
+		char [] chArrCrypto = q.cryptoQuote.toCharArray();
+
+		for(int i = 0; i < q.quoteLen; i++) {
+			if(chArrCrypto[i] == crypto) {
+				chArrPlain[i] = posAns;
 			}
 		}
-		
-		System.out.println(chArr);
-		return chArr.toString();
-
+	
+		return String.valueOf(chArrPlain);
 	}
 
+	/** Makes a list (array) of the words in the quote **/
 	public void collectWords() {
+		
 		// Deal directly with Strings first
 		ArrayList<String> strV = new ArrayList<String>();
 		String [] tokens = this.quote.split(" ");
 		
 		// Get rid of unnecessary punctuation
 		for(int i = 0; i < tokens.length; i++) {
+			
 			tokens[i] = tokens[i].replaceAll("[,?!.;\"]", "");
+			
 			// Only add the word if it's unique 
 			if(!strV.contains(tokens[i]))
 				strV.add(tokens[i]);
 		}
 		
 		// Build Word AL
-		for(String w: strV){
+		for(String w: strV) {
 			Word word = new Word(w);
 			words.add(word);
 		}
 	}
+	
+	/** Subroutine to make a list (array) of the words/tokens in the encrypted quotes
+	 *  Populates the given ArrayList with strings taken from given string **/
+	public void collectTokens(String str, ArrayList<String> arrL) {
+		
+		// Deal directly with Strings first
+		String [] tokens = str.split(" ");
+		
+		// Get rid of unnecessary punctuation
+		for(int i = 0; i < tokens.length; i++) {
+			// Remove punctuation
+			tokens[i] = tokens[i].replaceAll("[,?!.;\"]", "");
+			// Add
+			arrL.add(tokens[i]);
+		}
 
-	public Character alphaOf(char crypto){
-
-		char ret = this.cryptoToAlpha.get(crypto);
-
-		return ret;
 	}
 
-	public Character cryptoOf(char letter){
+	/** Given a crypto Char returns the regular alpha version **/
+	public Character alphaOf(char crypto) {
+		
+		return this.cryptoToAlpha.get(crypto);
+	}
 
-		char ret = this.alphaToCrypto.get(letter);
+	/** Given a regular alphabet Char, returns the crypto version **/
+	public Character cryptoOf(char letter) {
 
-		return ret;
+		return this.alphaToCrypto.get(letter);
 	}
 
 	/** Encrypts the quote; should only be used once; gives alphaToCrypto its value **/
-	public String encrypt(){
+	public String encrypt() {
+		
 		ArrayList<Character> alphaKey = new ArrayList<Character>();		// Shuffled Alphabet will go here
 		char [] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();  // Regular Alphabet
 		
@@ -164,11 +191,15 @@ public class Quote {
 		// Convert char [] to string
 		String encrypt = String.valueOf(encryptCharArr);
 		
+		// Make array(list) of cryptowords
+		collectTokens(encrypt, cryptoWords);
+		
 		return encrypt;
 	}
 
 	/** Method to get the character frequency; gives this.charFreq its value **/
 	public void findCharFreq() {
+		
 		// Temporary hash map to get characters and their values; unsorted
 		Map<Character, Integer> unsortedChFreq = new HashMap<Character,Integer>();
 		
@@ -196,14 +227,17 @@ public class Quote {
 				.collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2,LinkedHashMap::new));
 	}
 
-	/** Method to create the Easy quote puzzle: top 70% of least frequent charas to be shown **/
+	/** Method to create the Easy quote puzzle:
+	 * top 70% of least frequent charas to be shown **/
 	public String toEasy() {
+		
 		// Variables
 		double percentage = .7;		// Percentage of characters revealed
 		int numOfCharsRevealed = (int) (this.charFreq.size() * percentage); // int number of characters revealed
 		
 		// Keyset from charFreq hashmap (which is sorted by least frequent on top)
 		ArrayList<Character> charsinQuote = new ArrayList<Character>(this.charFreq.keySet());
+		
 		// The top 70% of least frequent charas to be shown will be here
 		ArrayList<Character> charsRevealed = new ArrayList<Character>(numOfCharsRevealed);	
 		
@@ -228,17 +262,24 @@ public class Quote {
 			}
 		}
 		
-		return String.valueOf(newChArr);
+		// Make list of tokens from encrypted quote
+		String easyStr = String.valueOf(newChArr);
+		collectTokens(easyStr, easyWordsHidden);
+				
+		return easyStr;
 	}
 	
-	/** Method to create the Medium quote puzzle: top 50% of least frequent charas to be shown **/
-	public String toMedium(){
+	/** Method to create the Medium quote puzzle
+	 * top 50% of least frequent charas to be shown **/
+	public String toMedium() {
+		
 		// Variables
 		double percentage = .5;		// Percentage of characters revealed
 		int numOfCharsRevealed = (int) (this.charFreq.size() * percentage); // int number of characters revealed
 
 		// Keyset from charFreq hashmap (which is sorted by least frequent on top)
 		ArrayList<Character> charsinQuote = new ArrayList<Character>(this.charFreq.keySet());
+		
 		// The top 70% of least frequent charas to be shown will be here
 		ArrayList<Character> charsRevealed = new ArrayList<Character>(numOfCharsRevealed);	
 
@@ -263,17 +304,24 @@ public class Quote {
 			}
 		}
 
-		return String.valueOf(newChArr);
+		// Make list of tokens from encrypted quote
+		String medStr = String.valueOf(newChArr);
+		collectTokens(medStr, medWordsHidden);
+
+		return medStr;
 	}
 
-	/** Method to create the Hard quote puzzle: top 20% of least frequent charas to be shown **/
-	public String toHard(){
+	/** Method to create the Hard quote puzzle: 
+	 * top 20% of least frequent charas to be shown **/
+	public String toHard() {
+		
 		// Variables
 		double percentage = .2;		// Percentage of characters revealed
 		int numOfCharsRevealed = (int) (this.charFreq.size() * percentage); // int number of characters revealed
 
 		// Keyset from charFreq hashmap (which is sorted by least frequent on top)
 		ArrayList<Character> charsinQuote = new ArrayList<Character>(this.charFreq.keySet());
+		
 		// The top 70% of least frequent charas to be shown will be here
 		ArrayList<Character> charsRevealed = new ArrayList<Character>(numOfCharsRevealed);	
 
@@ -298,10 +346,14 @@ public class Quote {
 			}
 		}
 
-		return String.valueOf(newChArr);
+		// Make list of tokens from encrypted quote
+		String hardStr = String.valueOf(newChArr);
+		collectTokens(hardStr, hardWordsHidden);
+
+		return hardStr;
 	}
-	
-	// Getters and Setters
+
+	/** Getters and Setters **/
 
 	public Map<Character, Character> getCryptoToAlpha() {
 		return cryptoToAlpha;
@@ -414,5 +466,37 @@ public class Quote {
 
 	public void setAlphaToCrypto(Map<Character, Character> alphaToCrypto) {
 		this.alphaToCrypto = alphaToCrypto;
+	}
+
+	public ArrayList<String> getEasyWordsHidden() {
+		return easyWordsHidden;
+	}
+
+	public ArrayList<String> getMedWordsHidden() {
+		return medWordsHidden;
+	}
+
+	public ArrayList<String> getHardWordsHidden() {
+		return hardWordsHidden;
+	}
+
+	public void setEasyWordsHidden(ArrayList<String> easyWordsHidden) {
+		this.easyWordsHidden = easyWordsHidden;
+	}
+
+	public void setMedWordsHidden(ArrayList<String> medWordsHidden) {
+		this.medWordsHidden = medWordsHidden;
+	}
+
+	public void setHardWordsHidden(ArrayList<String> hardWordsHidden) {
+		this.hardWordsHidden = hardWordsHidden;
+	}
+
+	public ArrayList<String> getCryptoWords() {
+		return cryptoWords;
+	}
+
+	public void setCryptoWords(ArrayList<String> cryptoWords) {
+		this.cryptoWords = cryptoWords;
 	}
 }
