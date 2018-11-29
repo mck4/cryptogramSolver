@@ -40,7 +40,7 @@ public class Main extends Application {
 			// Set the scene to stage and show the stage to user
 			stage.setScene( scene );
 			stage.setTitle( "Cryptogram Solver" );
-			//stage.getIcons().add(new Image("file:../../sudoku.png"));
+			stage.getIcons().add(new Image("file:../../crypto_icon.png"));
 			
 			stage.show();
 			

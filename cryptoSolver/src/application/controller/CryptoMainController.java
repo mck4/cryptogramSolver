@@ -14,11 +14,13 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class CryptoMainController implements EventHandler<ActionEvent> {
@@ -76,7 +78,9 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			// Set look of the button
 			newLabel.setStyle("-fx-border-color:  #b8860b;");
 			newLabel.setMaxWidth(155);
-			newLabel.setMaxHeight(33);
+			newLabel.setMaxHeight(40);
+			newLabel.setPrefHeight(40);
+			newLabel.setMinHeight(40);
 			newLabel.setPadding(new javafx.geometry.Insets(2.0, 5.0, 2.0, 5.0));
 			newLabel.setAlignment(Pos.BASELINE_LEFT);
 			
@@ -111,6 +115,8 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 											// Set as current Quote
 											currentQ = q; });
 			// Add button to display
+			VBox.setMargin(newLabel, new Insets(0.5,0,0.5,0));
+			VBox.setVgrow(newLabel, Priority.ALWAYS);
 			puzzles.getChildren().add(newLabel);
 			puzzleNum++;
 			
