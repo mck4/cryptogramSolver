@@ -445,17 +445,17 @@ public class Solver {
 							for(String t: tempStrings) {
 								int dictIndx = 0;
 								for(Word d1: this.dict.vocabulary) {
-									
+									boolean possibleMatch = true;
 									// First find words of same size
 									if(t.length() == d1.getWordLen()) {
 										int charIndx = 0;
-										boolean possibleMatch = true;
+										
 										// Compare character by character, excluding anything but letters
 										for(char c: t.toCharArray()) {
 											// Excluding anything but letters
 											if(Character.isLetter(c)) {
-												if(c == d1.getWord().charAt(charIndx)) {
-													// _H_ matching THE or SHE
+												if(c != d1.getWord().charAt(charIndx)) {
+													// possibleMatch =
 												}
 											}
 											charIndx++;
