@@ -223,7 +223,7 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 				mem = msg;
 			 }
 		}
-		/*else if (checkforTwoAndSearchCount <= checkforTwoAndSearch ){
+		else if (checkforTwoAndSearchCount <= checkforTwoAndSearch ){
 			
 			checkforTwoAndSearch = solver.checkforTwoAndSearch();
 			checkforTwoAndSearchCount++;
@@ -238,7 +238,7 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 				mem = msg;
 			 }
 			
-		}*/
+		}
 		else {	
 			checkforFilledInOneAndNeighborsCount = 0;
 			checkForFilledInOneCount = 0;

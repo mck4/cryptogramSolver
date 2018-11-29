@@ -439,7 +439,7 @@ public class Solver {
 							ArrayList<String> tempStrings = new ArrayList<String>();
 							Quote.collectTokens(temp, tempStrings);
 
-							// If whole words were found...
+							int wordMatches = 0;
 
 							// Check if each word is actually a word (ie in our dictionary)
 							for(String t: tempStrings) {
@@ -455,20 +455,27 @@ public class Solver {
 											// Excluding anything but letters
 											if(Character.isLetter(c)) {
 												if(c != d1.getWord().charAt(charIndx)) {
-													// possibleMatch =
+													possibleMatch = false;
 												}
 											}
 											charIndx++;
 										}
+										if(possibleMatch)
+											wordMatches++;
+										System.out.println(wordMatches);
+										System.out.println(tempStrings.size());
+										
 									}
-									// Compare character by character for matches, excluding anything but letters
+									// 
 									
 									
 								}
 							}
 							
-							if(isPossible) {
+							if(wordMatches <= tempStrings.size()) {
 								System.out.println("WOAH " + temp);
+								
+								/*
 								this.currSolution = temp;
 								
 								// Update hiddenTokens
@@ -477,7 +484,7 @@ public class Solver {
 								System.out.println("");
 								collectCharsFound(this.currSolution);
 								System.out.println(this.currCrypto);
-								checkforTwoAndSearchCount++;
+								checkforTwoAndSearchCount++;*/
 							}
 							
 						}
