@@ -172,9 +172,10 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			return;
 		}
 		
+		// First method
 		if((checkForFilledInOneCount < checkForFilledInOne) || (checkForFilledInOneCount == 0)) {
-			checkForFilledInOne = solver.checkforFilledInOne();
 			
+			checkForFilledInOne = solver.checkforFilledInOne();
 			checkForFilledInOneCount++;  // Increment
 			
 			// Update displays
@@ -189,9 +190,10 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			
 		
 		}
+		// Second method
 		else if (checkforFilledInOneAndNeighborsCount <= checkforFilledInOneAndNeighbors ) {
-			checkforFilledInOneAndNeighbors = solver.checkforFilledInOneAndNeighbors();
 			
+			checkforFilledInOneAndNeighbors = solver.checkforFilledInOneAndNeighbors();
 			checkforFilledInOneAndNeighborsCount++; // Increment
 			
 			// Update displays
@@ -205,11 +207,10 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			}
 	
 		}
-
+		// Third method
 		else if(checkforContractionsCount <= checkforContractions ) {
-			// reset
+			
 			checkforContractions = solver.checkforContractions();
-			System.out.println(solver.getCurrSolution());
 			checkforContractionsCount++;
 
 			// Update displays
@@ -222,11 +223,27 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 				mem = msg;
 			 }
 		}
-		else {
-			//solver.checkforTwoAndSearch();
+		/*else if (checkforTwoAndSearchCount <= checkforTwoAndSearch ){
+			
+			checkforTwoAndSearch = solver.checkforTwoAndSearch();
+			checkforTwoAndSearchCount++;
+			
+			// Update displays
+			display.setText(solver.getCurrSolution());
+			String msg = "Two and search";
+			postitnote.setText(msg);	
+			
+			if(!mem.equals(msg)) {
+				System.out.println(msg);
+				mem = msg;
+			 }
+			
+		}*/
+		else {	
 			checkforFilledInOneAndNeighborsCount = 0;
 			checkForFilledInOneCount = 0;
 			checkforContractionsCount = 0;
+			checkforTwoAndSearchCount = 0;
 		}
 	}
 	

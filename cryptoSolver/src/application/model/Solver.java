@@ -360,11 +360,11 @@ public class Solver {
 	}
 	
 	
-	/*
+	
 	public int checkforTwoAndSearch() {
 		// Match found flag
 		boolean foundAMatch = false;
-		int index = 0;
+		int hiddenTokensIndx = 0;
 		
 		// For each token 
 		for(String s: this.hiddenTokens) {			
@@ -382,8 +382,10 @@ public class Solver {
 					count++;
 			}
 
-			// This word is mostly filled out so let's narrow it down
+			// Select words with two empty spaces
 			if(count == 2) {
+				
+				// Will hold the indexes for the two empty spots
 				ArrayList<Integer> indexes = new ArrayList<Integer>();
 				
 				// Get position of empty spaces
@@ -397,13 +399,18 @@ public class Solver {
 				// Compare current word to our dictionary
 				for(Word w: this.dict.getVocabulary()) {
 
-					// If this word is the same length...
+					// Only compare with words of the same length
 					if(s.length() == w.getWordLen()) {
+						
+						// Assume the word is a match until proven false
 						foundAMatch = true;
 						
 						// Look for words that might be a match
 						for(int i = 0; i < s.length(); i++) {
-							if(Character.isLetter(s.charAt(i))){
+							// If the character of the current puzzle token (with blanks) is a letter, compare
+							if(Character.isLetter(s.charAt(i))) {
+								
+								// If each char that's a letter matches, a match is found; otherwise there's no match
 								if(s.charAt(i) != w.getWord().charAt(i)) {
 									foundAMatch = false;
 									break;
@@ -411,41 +418,67 @@ public class Solver {
 							}
 						}	
 						
+						// Found a potential match
 						if(foundAMatch) {
-							int pos1 = indexes.get(0);
-							int pos2 = indexes.get(1);
-							char crypto1 = this.cryptoWords.get(index).charAt(pos1);
-							char crypto2 = this.cryptoWords.get(index).charAt(pos2);
-							char alphaPos1 = w.getWord().charAt(pos1);
-							char alphaPos2 = w.getWord().charAt(pos2);
+							
+							// First position charas
+							char crypto1 = this.cryptoWords.get(hiddenTokensIndx).charAt(indexes.get(0));
+							char alphaPos1 = w.getWord().charAt(indexes.get(0));
+							// Second position charas
+							char crypto2 = this.cryptoWords.get(hiddenTokensIndx).charAt(indexes.get(1));
+							char alphaPos2 = w.getWord().charAt(indexes.get(1));
+							
+							// Builds the string with the two possible charas
+							String temp = Quote.updatePuzzle(alphaPos1, crypto1, currQ, currSolution);						
+							temp = Quote.updatePuzzle(alphaPos2, crypto2, currQ, temp);
+														
+							// Assumes string generated (temp) is not a possible answer until proven
 							boolean isPossible= false;
 							
-							String temp = Quote.updatePuzzle(alphaPos1, crypto1, currQ, currSolution);
-							System.out.println(temp);
-							
-							temp = Quote.updatePuzzle(alphaPos2, crypto2, currQ, temp);
-							
-							ArrayList<String> tempSolu = new ArrayList<String>();
-							Quote.collectTokens(temp, tempSolu);
-							
-					
-							for(String posSolu: tempSolu) {
-								if(!posSolu.contains("_")) {
-									for(Word d: this.dict.getVocabulary()) {
-										if(posSolu.equals(d.getWord())) {
-											System.out.println("!!!!!!!!!!!!!!");
-											System.out.println(posSolu);
-											isPossible = true;
-											System.out.println(temp);
+							// Tokenize possible string
+							ArrayList<String> tempStrings = new ArrayList<String>();
+							Quote.collectTokens(temp, tempStrings);
+
+							// If whole words were found...
+
+							// Check if each word is actually a word (ie in our dictionary)
+							for(String t: tempStrings) {
+								int dictIndx = 0;
+								for(Word d1: this.dict.vocabulary) {
+									
+									// First find words of same size
+									if(t.length() == d1.getWordLen()) {
+										int charIndx = 0;
+										boolean possibleMatch = true;
+										// Compare character by character, excluding anything but letters
+										for(char c: t.toCharArray()) {
+											// Excluding anything but letters
+											if(Character.isLetter(c)) {
+												if(c == d1.getWord().charAt(charIndx)) {
+													// _H_ matching THE or SHE
+												}
+											}
+											charIndx++;
 										}
-										else
-											isPossible = false;
 									}
+									// Compare character by character for matches, excluding anything but letters
+									
+									
 								}
 							}
 							
-							if(isPossible)
+							if(isPossible) {
 								System.out.println("WOAH " + temp);
+								this.currSolution = temp;
+								
+								// Update hiddenTokens
+								updateHiddenTokens();
+								// Update chars found
+								System.out.println("");
+								collectCharsFound(this.currSolution);
+								System.out.println(this.currCrypto);
+								checkforTwoAndSearchCount++;
+							}
 							
 						}
 					}
@@ -454,13 +487,13 @@ public class Solver {
 
 				}
 			}
-			index ++;
+			hiddenTokensIndx++;
 		}
-		return this.checkforContractionsCount;
+		return this.checkforTwoAndSearchCount;
 	}
-	*/
 	
 	
+	/** Updates HiddenTokens array **/
 	public void updateHiddenTokens() {
 		// Deal directly with Strings first
 		String [] tokens = this.currSolution.split(" ");
@@ -474,6 +507,7 @@ public class Solver {
 		}
 	}
 
+	/** Is the puzzle solved? **/
 	public boolean isSolved(){
 		if(this.currSolution.equals(currQ.getQuote()))
 				solved = true;
