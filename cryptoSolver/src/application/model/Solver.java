@@ -1,32 +1,42 @@
 /** Solver.java **/
+// Solves the puzzles
 
 package application.model;
 
 import java.util.ArrayList;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 public class Solver {
 	Dictionary dict;     // Solver has a dictionary
 	Quote currQ;	     // The current puzzle 
 	String currSolution; // Current solution so far (not filled) *Needs to be updated each time*
+	String currCrypto;
 	int currDifficulty;  // Current difficulty
+	boolean solved = false;
 	ArrayList<String> charsFound = new ArrayList<String>();
-	
+
 	// counters
 	int checkforFilledInOneCount;
 	int checkforFilledInAndNeighborsCount;
-	
+	int checkforContractionsCount;
+	int checkforTwoAndSearchCount;
+
 	// Copies from currQ
 	ArrayList<String> cryptoWords = new ArrayList<String>();  // Cryptotext beneath the quote
 	ArrayList<String> hiddenTokens = new ArrayList<String>(); // Half-filled Tokens of words in puzzle *Needs to be updated each time*
-	
+
 	/** Constructor **/
 	public Solver(Dictionary d, Quote q, int diff) {
-		
+
 		this.dict = d;
 		this.currQ = q;
 		this.cryptoWords = q.getCryptoWords();
+		this.currCrypto = q.getCryptoQuote();
 		this.checkforFilledInOneCount = 0;
-		
+		this.checkforFilledInAndNeighborsCount = 0;
+		this.checkforContractionsCount = 0;
+
 		if(diff == 1) {
 			this.currDifficulty = 1;
 			this.currSolution = q.getqEasy();
@@ -42,63 +52,63 @@ public class Solver {
 			this.currSolution = q.getqHard();
 			this.hiddenTokens = (ArrayList<String>) q.getHardWordsHidden().clone();
 		}
-		
+
 		collectCharsFound(this.currSolution);
-		
+
 	}
-	
+
 	public void collectCharsFound(String current){
-		
+
 		for(char chara: current.toCharArray()){
 			if(Character.isLetter(chara)){
 				if(!charsFound.contains(String.valueOf(chara)))
 					charsFound.add(String.valueOf(chara));
 			}
 		}
-		
+
 	}
-	
+
 	/** Find letters that are mostly filled in (ie all but 1 spaces) 
 	 * Compare with dictionary, find one that matches all chars but one**/
 	public int checkforFilledInOne() {
 		// Match found flag
 		boolean foundAMatch = false;
-		
+
 		// For each token 
 		for(String s: this.hiddenTokens) {			
 			// Break when the first match is found
 			if(foundAMatch)
 				break;
-			
+
 			// Keep track of # of matches found; here it should just be one
 			int matchesFound = 0; 
-			
+
 			// Our matched string will go here
 			String matchStr = "";
-			
+
 			// Convert token to char array
 			char [] charas = s.toCharArray();
-			
+
 			// Count empty spaces in token
 			int count = 0;
 			for(char c: charas) {
 				if(c == '_')
 					count++;
 			}
-			
+
 			// This word is mostly filled out so let's narrow it down
 			if( count == 1 ) {
-				
+
 				// Compare current word to our dictionary
 				for(Word w: this.dict.getVocabulary()) {
-					
+
 					// If this word is the same length...
 					if(s.length() == w.getWordLen()) {
-						
+
 						// A match is found if numToMatch and matchCount are the same
 						int numToMatch = s.length() - 1; 
 						int matchCount = 0;
-						
+
 						// Look for words that might be a match
 						for(int i = 0; i < s.length(); i++) {
 							if(s.charAt(i) == w.getWord().charAt(i)){
@@ -106,7 +116,7 @@ public class Solver {
 								matchCount++;
 							}
 						}
-						
+
 						// An almost perfect match is found
 						if(numToMatch == matchCount) {
 							matchStr = w.getWord(); // Get the matched word
@@ -117,15 +127,15 @@ public class Solver {
 			}
 			// Here we'll just deal with cases where only one match is found
 			if(matchesFound == 1) {
-				
+
 				// Characters go here
 				char ans = ' ';
 				char crypto = ' ';
-				
+
 				// Indexes go here
 				int posOfChar = 0;
 				int posOfWord = this.hiddenTokens.indexOf(s);
-				
+
 				// Find the blank
 				for(int i = 0; i < s.length(); i++) {
 					foundAMatch = true;
@@ -135,68 +145,67 @@ public class Solver {
 						ans = matchStr.charAt(i);	// Get letter answer
 					}
 				}
-				
+
 				/* UPDATES WHEN ANSWER FOUND */
-				
+
 				// Update current solution
 				this.currSolution = Quote.updatePuzzle(ans, crypto, currQ, currSolution);
 				// Update hiddenTokens
 				updateHiddenTokens();
 				// Update chars found
 				collectCharsFound(this.currSolution);
-				
+
 				checkforFilledInOneCount++; // Increment
-				
+
+				System.out.println("");
 				System.out.println(this.currSolution);
+				System.out.println(this.currCrypto);
 			}	
 		}
 
 		return this.checkforFilledInOneCount;
 	}
-	
+
 	/** Find letters that are mostly filled in (ie all but 1 spaces) 
 	 * Compare with dictionary, find one that matches all chars but one
 	 * Accepts multiple matches and narrows it down by checking neighbors **/
 	public int checkforFilledInOneAndNeighbors() {
 		// Match found flag
 		boolean foundAMatch = false;
-		
+
 		// For each token 
 		for(String s: this.hiddenTokens) {			
 			// Break when the first match is found
 			if(foundAMatch)
 				break;
-			
-			// Keep track of # of matches found; here it should just be one
-			int matchesFound = 0; 
-			
+
 			// Our matched strings will go here **USES AN ARRAYLIST**
 			ArrayList<String> matchStrs = new ArrayList<String>();
 			ArrayList<String> matchNarrow = new ArrayList<String>();
-			
+
 			// Convert token to char array
 			char [] charas = s.toCharArray();
-			
+
 			// Count empty spaces in token
 			int count = 0;
 			for(char c: charas) {
 				if(c == '_')
 					count++;
 			}
-			
+
 			// This word is mostly filled out so let's narrow it down
 			if( count == 1 ) {
-				
+
 				// Compare current word to our dictionary
 				for(Word w: this.dict.getVocabulary()) {
-					
+
 					// If this word is the same length...
 					if(s.length() == w.getWordLen()) {
-						
+
 						// A match is found if numToMatch and matchCount are the same
 						int numToMatch = s.length() - 1; 
 						int matchCount = 0;
-						
+
 						// Look for words that might be a match
 						for(int i = 0; i < s.length(); i++) {
 							if(s.charAt(i) == w.getWord().charAt(i)){
@@ -204,7 +213,7 @@ public class Solver {
 								matchCount++;
 							}
 						}
-						
+
 						// An almost perfect match is found
 						if(numToMatch == matchCount) {
 							matchStrs.add(w.getWord()); // Get the matched word, add to AL
@@ -216,17 +225,11 @@ public class Solver {
 				// Characters go here
 				char ans = ' ';
 				char crypto = ' ';
-				
+
 				// Indexes go here
 				int posOfChar = 0;
 				int posOfWord = this.hiddenTokens.indexOf(s);
-				
-				//System.out.println(matchesFound);
-				//System.out.println(matchStrs);
-				//System.out.println(s);
-				//System.out.println(charsFound);
-				
-				
+
 				// Find the blank
 				for(int i = 0; i < s.length(); i++) {
 					foundAMatch = true;
@@ -235,47 +238,233 @@ public class Solver {
 						crypto = this.cryptoWords.get(posOfWord).charAt(posOfChar);   // Get corresponding crypto
 					}
 				}
-				
+
 				// Iterate through matched Strings and narrow down
 				for(String m: matchStrs) {
 					// Get possible ans character from current matching word
 					ans = m.charAt(posOfChar);
-					
+
 					// If the current character is in the list of characters found...
 					if(charsFound.contains(String.valueOf(ans)))
 						continue;			// This word is not a possible solution since the possible ans is already in the quote
 					else 
 						matchNarrow.add(m);	// If not, this is a possible candidate
 				}
-				
-				System.out.println(matchNarrow);
-				
+
 				// There is only one possible solution!
 				if(matchNarrow.size() == 1) {
 					// Get letter answer
 					ans = matchNarrow.get(0).charAt(posOfChar);
-					
+
 					/* UPDATES WHEN ANSWER FOUND */
-					
+
 					// Update current solution
 					this.currSolution = Quote.updatePuzzle(ans, crypto, currQ, currSolution);
 					// Update hiddenTokens
 					updateHiddenTokens();
 					// Update chars found
+					System.out.println("");
 					collectCharsFound(this.currSolution);
+					System.out.println(this.currCrypto);
 					checkforFilledInAndNeighborsCount++;
 				}
 			}
-			
+
 		}
 
 		return this.checkforFilledInAndNeighborsCount;
 	}
+
+	/** CHECK FOR CONTRACTIONS **/
+	public int checkforContractions() {
+		// Match found flag
+		boolean foundAMatch = false;
+		int index = 0;
+		
+		// For each token 
+		for(String s: this.hiddenTokens) {			
+			// Break when the first match is found
+			if(foundAMatch)
+				break;
+
+			boolean contractionFound = false;
+
+			// Convert token to char array
+			char [] charas = s.toCharArray();
+
+			// Count empty spaces in token
+			int count = 0;
+			for(char c: charas) {
+				if(c == '_')
+					count++;
+				// If contraction found and there's an empty space in the word, break
+				if(c == '\'' && count > 0) {
+					contractionFound = true;
+					break;
+				}
+			}
+
+			// This word is mostly filled out so let's narrow it down
+			if(contractionFound) {
+
+				// Compare current word to our dictionary
+				for(Word w: this.dict.getVocabulary()) {
+
+					// If this word is the same length...
+					if(s.length() == w.getWordLen() && w.isAContraction) {
+						foundAMatch = true;
+						
+
+						// Look for words that might be a match
+						for(int i = 0; i < s.length(); i++) {
+							if(Character.isLetter(s.charAt(i))){
+								if(s.charAt(i) != w.getWord().charAt(i)) {
+									foundAMatch = false;
+									break;
+								}
+							}
+						}
+
+						// An almost perfect match is found
+						if(foundAMatch) {
+							char ans = ' ';
+							char crypto = ' ';
+							for(int i = 0; i< s.length(); i++) {
+								if(s.charAt(i) == '_') {
+									/* UPDATES WHEN ANSWER FOUND */
+									ans = w.getWord().charAt(i);
+									crypto = this.cryptoWords.get(index).charAt(i);
+
+									// Update current solution
+									this.currSolution = Quote.updatePuzzle(ans, crypto, currQ, currSolution);
+								}
+							}
+
+							// Update hiddenTokens
+							updateHiddenTokens();
+							// Update chars found
+							System.out.println("");
+							collectCharsFound(this.currSolution);
+							System.out.println(this.currCrypto);
+							checkforContractionsCount++;
+						}							
+					}
+
+				}
+			}
+			index ++;
+		}
+
+
+		return this.checkforContractionsCount;
+	}
+	
+	
+	/*
+	public int checkforTwoAndSearch() {
+		// Match found flag
+		boolean foundAMatch = false;
+		int index = 0;
+		
+		// For each token 
+		for(String s: this.hiddenTokens) {			
+			// Break when the first match is found
+			if(foundAMatch)
+				break;
+
+			// Convert token to char array
+			char [] charas = s.toCharArray();
+
+			// Count empty spaces in token
+			int count = 0;
+			for(char c: charas) {
+				if(c == '_')
+					count++;
+			}
+
+			// This word is mostly filled out so let's narrow it down
+			if(count == 2) {
+				ArrayList<Integer> indexes = new ArrayList<Integer>();
+				
+				// Get position of empty spaces
+				count = 0;
+				for(int i = 0; i <s.length(); i++) {
+					if(charas[i] == '_') {
+						indexes.add(i);
+					}
+				}
+
+				// Compare current word to our dictionary
+				for(Word w: this.dict.getVocabulary()) {
+
+					// If this word is the same length...
+					if(s.length() == w.getWordLen()) {
+						foundAMatch = true;
+						
+						// Look for words that might be a match
+						for(int i = 0; i < s.length(); i++) {
+							if(Character.isLetter(s.charAt(i))){
+								if(s.charAt(i) != w.getWord().charAt(i)) {
+									foundAMatch = false;
+									break;
+								}
+							}
+						}	
+						
+						if(foundAMatch) {
+							int pos1 = indexes.get(0);
+							int pos2 = indexes.get(1);
+							char crypto1 = this.cryptoWords.get(index).charAt(pos1);
+							char crypto2 = this.cryptoWords.get(index).charAt(pos2);
+							char alphaPos1 = w.getWord().charAt(pos1);
+							char alphaPos2 = w.getWord().charAt(pos2);
+							boolean isPossible= false;
+							
+							String temp = Quote.updatePuzzle(alphaPos1, crypto1, currQ, currSolution);
+							System.out.println(temp);
+							
+							temp = Quote.updatePuzzle(alphaPos2, crypto2, currQ, temp);
+							
+							ArrayList<String> tempSolu = new ArrayList<String>();
+							Quote.collectTokens(temp, tempSolu);
+							
+					
+							for(String posSolu: tempSolu) {
+								if(!posSolu.contains("_")) {
+									for(Word d: this.dict.getVocabulary()) {
+										if(posSolu.equals(d.getWord())) {
+											System.out.println("!!!!!!!!!!!!!!");
+											System.out.println(posSolu);
+											isPossible = true;
+											System.out.println(temp);
+										}
+										else
+											isPossible = false;
+									}
+								}
+							}
+							
+							if(isPossible)
+								System.out.println("WOAH " + temp);
+							
+						}
+					}
+					
+					
+
+				}
+			}
+			index ++;
+		}
+		return this.checkforContractionsCount;
+	}
+	*/
+	
 	
 	public void updateHiddenTokens() {
 		// Deal directly with Strings first
 		String [] tokens = this.currSolution.split(" ");
-		
+
 		// Get rid of unnecessary punctuation
 		for(int i = 0; i < tokens.length; i++) {
 			// Remove punctuation
@@ -285,10 +474,19 @@ public class Solver {
 		}
 	}
 
+	public boolean isSolved(){
+		if(this.currSolution.equals(currQ.getQuote()))
+				solved = true;
+		
+		return solved;
+	}
+	
+	/** GETTERS & SETTERS **/
+
 	public String toString(){
 		return this.currSolution;
 	}
-	
+
 	public Dictionary getDict() {
 		return dict;
 	}
@@ -340,7 +538,7 @@ public class Solver {
 	public void setHiddenTokens(ArrayList<String> hiddenTokens) {
 		this.hiddenTokens = hiddenTokens;
 	}
-	
-	
+
+
 
 }

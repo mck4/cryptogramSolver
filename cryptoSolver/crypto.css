@@ -1,8 +1,9 @@
 .text-area {
     -fx-background-color: transparent;
+    -fx-background-fills: null;
 }
 
-.text-area .text{
+.text-area .text {
 	-fx-fill: #000000;	
 }
 

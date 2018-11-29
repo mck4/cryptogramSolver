@@ -1,4 +1,5 @@
 /** CryptoMainController.java **/
+// Controller for CryptoMain.fxml
 
 package application.controller;
 
@@ -37,16 +38,21 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	public static Solver solver;
 	public static Dictionary dictionary;
 	public static int difficultyMode = easy; // 1 - Easy, 2 - Medium, 3 - Hard
+	public static String mem = "";
 	
 	// Counts
-	int checkForFilledInOne = 0, checkForFilledInOneCount = -1;
-	int checkforFilledInOneAndNeighbors = 0, checkforFilledInOneAndNeighborsCount = -1;
+	int checkForFilledInOne = 0, checkForFilledInOneCount = 0;
+	int checkforFilledInOneAndNeighbors = 0, checkforFilledInOneAndNeighborsCount = 0;
+	int checkforContractions = 0, checkforContractionsCount = 0;
+	int checkforTwoAndSearch = 0, checkforTwoAndSearchCount = 0;
 	
 	ArrayList<String> comboBoxChoices = new ArrayList<String>();
 
 	
 	/**  This method loads automatically when program is run **/
 	public void initialize() {
+		
+		postitnote.setBackground(null);
 		
 		// Combo box display
 		comboBoxChoices.addAll(Arrays.asList("Easy", "Medium", "Hard", "Solution"));
@@ -86,14 +92,22 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 											// Generate new solver with new puzzle
 											solver = null;
 											solver = new Solver(dictionary, q, easy); 
-											// Display
+											// Display on GUI
 											displaynum.setText(puzzleNumstr);
 											display.setText(solver.getCurrSolution());
 											displaycrypto.setText(q.getCryptoQuote());
 											displayauthor.setText(q.getAuthor());
+											postitnote.setText("");
+											postitnote.setBackground(null);
+											// Display on console
+											System.out.println("");
+											System.out.println(puzzleNumstr);
+											System.out.println(solver.getCurrSolution());
+											System.out.println(q.getCryptoQuote());
 											// Reset
 											checkForFilledInOneCount = -1;
 											checkforFilledInOneAndNeighborsCount = -1;
+											mem = "";
 											// Set as current Quote
 											currentQ = q; });
 			// Add button to display
@@ -142,34 +156,71 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	/** Method to handle ... **/
 	@Override
 	public void handle(ActionEvent event) {
+
 		if(solver == null)
 			return;
 		
-		if(checkForFilledInOneCount < checkForFilledInOne ) {
+		if(solver.isSolved()){
+			postitnote.setText("Puzzle is solved!");
+			System.out.println("Puzzle is solved!");
+			return;
+		}
+		
+		if((checkForFilledInOneCount < checkForFilledInOne) || (checkForFilledInOneCount == 0)) {
 			checkForFilledInOne = solver.checkforFilledInOne();
 			
 			checkForFilledInOneCount++;  // Increment
 			
 			// Update displays
 			display.setText(solver.getCurrSolution());
-			postitnote.setText("Here we check for words with one blank, compare with our dictionary and find only 1 solution possible, prioritizing larger words " + checkForFilledInOne + " time(s).");
+			String msg = "Here we check for words with one blank, compare with our dictionary and find only 1 solution possible, prioritizing larger words " + checkForFilledInOne + " time(s).";
+			postitnote.setText(msg);
+			
+			if(checkForFilledInOne != 0 && (!mem.equals(msg))) {
+				System.out.println(msg);
+				mem = msg;
+			}
 			
 		
 		}
-		else if (checkforFilledInOneAndNeighborsCount < checkforFilledInOneAndNeighbors ) {
+		else if (checkforFilledInOneAndNeighborsCount <= checkforFilledInOneAndNeighbors ) {
 			checkforFilledInOneAndNeighbors = solver.checkforFilledInOneAndNeighbors();
 			
 			checkforFilledInOneAndNeighborsCount++; // Increment
 			
 			// Update displays
 			display.setText(solver.getCurrSolution());
-			postitnote.setText("Again check for words with one blank, and consider words with multiple solutions but narrow down the solutions looking at neighboring chars " + checkforFilledInOneAndNeighbors + " time(s).");
+			String msg = "Again check for words with one blank, and consider words with multiple solutions but narrow down the solutions looking at neighboring chars " + checkforFilledInOneAndNeighbors + " time(s).";
+			postitnote.setText(msg);			
+			
+			if(!mem.equals(msg)) {
+				System.out.println(msg);
+				mem = msg;
+			}
 	
 		}
-		else {
+
+		else if(checkforContractionsCount <= checkforContractions ) {
 			// reset
+			checkforContractions = solver.checkforContractions();
+			System.out.println(solver.getCurrSolution());
+			checkforContractionsCount++;
+
+			// Update displays
+			display.setText(solver.getCurrSolution());
+			String msg = "Check for contractions " + checkforContractions + " time(s).";
+			postitnote.setText(msg);			
+
+			if(!mem.equals(msg)) {
+				System.out.println(msg);
+				mem = msg;
+			 }
+		}
+		else {
+			//solver.checkforTwoAndSearch();
 			checkforFilledInOneAndNeighborsCount = 0;
 			checkForFilledInOneCount = 0;
+			checkforContractionsCount = 0;
 		}
 	}
 	

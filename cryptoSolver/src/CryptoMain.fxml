@@ -88,7 +88,7 @@
             <Rectangle2D height="123.0" minX="29.0" minY="20.0" width="236.0" />
          </viewport>
       </ImageView>
-      <TextArea fx:id="postitnote" editable="false" layoutX="194.0" layoutY="265.0" prefHeight="122.0" prefWidth="234.0" promptText="Blah" stylesheets="@../crypto.css" text="Blah" wrapText="true">
+      <TextArea fx:id="postitnote" editable="false" layoutX="194.0" layoutY="265.0" prefHeight="122.0" prefWidth="234.0" stylesheets="@../crypto.css" wrapText="true">
          <font>
             <Font name="Calibri Italic" size="16.0" />
          </font>

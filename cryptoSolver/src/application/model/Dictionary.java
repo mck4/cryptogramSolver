@@ -1,4 +1,5 @@
 /** Dictionary.java **/
+// Has vocabulary and information on words
 
 package application.model;
 

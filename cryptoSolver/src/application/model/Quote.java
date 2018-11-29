@@ -1,4 +1,5 @@
 /** Quote.java **/
+// Has info on each quote puzzle
 
 package application.model;
 
@@ -127,7 +128,7 @@ public class Quote {
 	
 	/** Subroutine to make a list (array) of the words/tokens in the encrypted quotes
 	 *  Populates the given ArrayList with strings taken from given string **/
-	public void collectTokens(String str, ArrayList<String> arrL) {
+	public static void collectTokens(String str, ArrayList<String> arrL) {
 		
 		// Deal directly with Strings first
 		String [] tokens = str.split(" ");
