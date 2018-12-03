@@ -54,7 +54,7 @@ public class Solver {
 		}
 
 		collectCharsFound(this.currSolution);
-
+		
 	}
 
 	/** Updates the list of characters found in solution **/
@@ -90,6 +90,77 @@ public class Solver {
 		return solved;
 	}
 
+	/** Given a string, counts the number of _ or empty spaces **/
+	public int numOfEmptySpaces(String s) {
+
+		// Convert token to char array
+		char [] charas = s.toCharArray();
+
+		// Count empty spaces in token
+		int count = 0;
+		for(char c: charas) {
+			if(c == '_')
+				count++;
+		}
+		
+		return count;
+	}
+	
+	/** Returns true or false if a word is very similar to the other **/
+	public boolean isaMatch(String p, String d) {
+		
+		// Assume its a match
+		boolean match = true;
+		
+		// If the lengths aren't the same this won't work so return false
+		if(p.length() != d.length())
+			return false;
+
+		// Check how similar the two words are
+		for(int i = 0; i < p.length(); i++) {
+			if(Character.isLetter(p.charAt(i))){
+				if(p.charAt(i) != d.charAt(i)) {
+					match = false;
+					break;
+				}
+			}
+		}
+		
+		return match;
+	}
+	
+	/** Given a string, returns a list of indices where empty spots are found "_" **/
+	public ArrayList<Integer> returnPos (String s) {
+		
+		ArrayList<Integer> indices = new ArrayList<Integer>();
+
+		for(int i = 0; i < s.length(); i++) {
+			//foundAMatch = true;
+			if(s.charAt(i) == '_') {
+				indices.add(i);
+			}
+		}
+
+		return null;
+	}
+
+	/** Returns a list of words the same length of string from the dictionary **/
+	public ArrayList<String> sameLengthList (String s) {
+		
+		ArrayList<String> sameLen = new ArrayList<String>();
+		
+		// Compare current word to our dictionary
+		for(Word w: this.dict.getVocabulary()) {
+
+			// If this word is the same length...
+			if(s.length() == w.getWordLen()) 
+				sameLen.add(w.getWord());
+			
+		}
+
+		return sameLen;
+	}
+
 	/** 
 	 * Find letters that are mostly filled in (ie all but 1 spaces) 
 	 * Compare with dictionary, find one that matches all chars but one
@@ -110,44 +181,25 @@ public class Solver {
 			// Our matched string will go here
 			String matchStr = "";
 
-			// Convert token to char array
-			char [] charas = s.toCharArray();
-
-			// Count empty spaces in token
-			int count = 0;
-			for(char c: charas) {
-				if(c == '_')
-					count++;
-			}
-
-			// This word is mostly filled out so let's narrow it down
-			if( count == 1 ) {
-
-				// Compare current word to our dictionary
-				for(Word w: this.dict.getVocabulary()) {
-
-					// If this word is the same length...
-					if(s.length() == w.getWordLen()) {
-
-						// A match is found if numToMatch and matchCount are the same
-						int numToMatch = s.length() - 1; 
-						int matchCount = 0;
-
-						// Look for words that might be a match
-						for(int i = 0; i < s.length(); i++) {
-							if(s.charAt(i) == w.getWord().charAt(i)){
-								//System.out.println("s: " + s.charAt(i) + "; w: " + w.getWord().charAt(i));
-								matchCount++;
-							}
-						}
-
-						// An almost perfect match is found
-						if(numToMatch == matchCount) {
-							matchStr = w.getWord(); // Get the matched word
-							matchesFound++;		    // Increment for each possible match found
-						}							
+			// Get number of empty spaces
+			int count = numOfEmptySpaces(s);
+			
+			// This word is mostly filled out so let's narrow it down; exclude one letter charas
+			if( (count == 1) && (s.length() > 1)) {
+				
+				// Get list of words the same length
+				ArrayList<String> sameLen = new ArrayList<String>();
+				sameLen = sameLengthList(s);
+				
+				// For words of the same length compare if they're very similar
+				for(String d: sameLen) {
+					// If the words are very similar...
+					if(isaMatch(s, d)) {
+						matchStr = d;
+						matchesFound++;
 					}
 				}
+			
 			}
 			// Here we'll just deal with cases where only one match is found
 			if(matchesFound == 1) {
@@ -209,43 +261,25 @@ public class Solver {
 			ArrayList<String> matchStrs = new ArrayList<String>();
 			ArrayList<String> matchNarrow = new ArrayList<String>();
 
-			// Convert token to char array
-			char [] charas = s.toCharArray();
-
-			// Count empty spaces in token
-			int count = 0;
-			for(char c: charas) {
-				if(c == '_')
-					count++;
-			}
+			// Get number of empty spaces
+			int count = numOfEmptySpaces(s);
 
 			// This word is mostly filled out so let's narrow it down
 			if( count == 1 ) {
 
-				// Compare current word to our dictionary
-				for(Word w: this.dict.getVocabulary()) {
-
-					// If this word is the same length...
-					if(s.length() == w.getWordLen()) {
-
-						// A match is found if numToMatch and matchCount are the same
-						int numToMatch = s.length() - 1; 
-						int matchCount = 0;
-
-						// Look for words that might be a match
-						for(int i = 0; i < s.length(); i++) {
-							if(s.charAt(i) == w.getWord().charAt(i)){
-
-								matchCount++;
-							}
-						}
-
-						// An almost perfect match is found
-						if(numToMatch == matchCount) {
-							matchStrs.add(w.getWord()); // Get the matched word, add to AL
-						}							
+				// Get list of words the same length
+				ArrayList<String> sameLen = new ArrayList<String>();
+				sameLen = sameLengthList(s);
+				
+				// For words of the same length compare if they're very similar
+				for(String d: sameLen) {
+					// If the words are very similar...
+					if(isaMatch(s, d)) {
+						
+						matchStrs.add(d);
 					}
 				}
+			
 			}
 			if(!matchStrs.isEmpty()) {
 				// Characters go here
@@ -317,22 +351,15 @@ public class Solver {
 			if(foundAMatch)
 				break;
 
+			// No contraction yet
 			boolean contractionFound = false;
 
-			// Convert token to char array
-			char [] charas = s.toCharArray();
+			// Count empty spaces
+			int count = numOfEmptySpaces(s);
 
-			// Count empty spaces in token
-			int count = 0;
-			for(char c: charas) {
-				if(c == '_')
-					count++;
-				// If contraction found and there's an empty space in the word, break
-				if(c == '\'' && count > 0) {
-					contractionFound = true;
-					break;
-				}
-			}
+			// If the word contains an apostrophe and there is at least one empty space...
+			if(s.contains("'") && count > 0)
+				contractionFound = true;
 
 			// This word is mostly filled out so let's narrow it down
 			if(contractionFound) {
@@ -343,6 +370,19 @@ public class Solver {
 					// If this word is the same length...
 					if(s.length() == w.getWordLen() && w.isAContraction) {
 						foundAMatch = true;
+						
+						// Get list of words the same length
+						ArrayList<String> sameLen = new ArrayList<String>();
+						sameLen = sameLengthList(s);
+						
+						// For words of the same length compare if they're very similar
+						for(String d: sameLen) {
+							// If the words are very similar...
+							if(!isaMatch(s, d)) {
+								foundAMatch = false;
+							}
+						}
+						/*foundAMatch = true;
 
 
 						// Look for words that might be a match
@@ -353,10 +393,11 @@ public class Solver {
 									break;
 								}
 							}
-						}
+						}*/
 
 						// An almost perfect match is found
 						if(foundAMatch) {
+							System.out.println(s + " wowah " + w.getWord());
 							char ans = ' ';
 							char crypto = ' ';
 							for(int i = 0; i< s.length(); i++) {
@@ -413,15 +454,8 @@ public class Solver {
 			if(foundAMatch)
 				break;
 
-			// Convert token to char array
-			char [] charas = s.toCharArray();
-
-			// Count empty spaces in token
-			int count = 0;
-			for(char c: charas) {
-				if(c == '_')
-					count++;
-			}
+			// Find letters with two empty spaces
+			int count = numOfEmptySpaces(s);
 
 			// Select words with two empty spaces
 			if(count == 2) {
@@ -432,7 +466,7 @@ public class Solver {
 				// Get position of empty spaces
 				count = 0;
 				for(int i = 0; i <s.length(); i++) {
-					if(charas[i] == '_') {
+					if(s.charAt(i) == '_') {
 						indexes.add(i);
 					}
 				}
