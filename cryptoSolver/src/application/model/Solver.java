@@ -1,12 +1,34 @@
-/** Solver.java **/
+/** Solver.java 
+ * 
+ * This part of the program does the actual solving. 
+ * Currently it has 4 methods of solving:
+ * 	 1) checkforFilledInOne
+ * 		- This searches for words with one empty space
+ * 		- Compares this word with our dictionary to aggregate possible solutions
+ * 		- If there's just ONE solution, then it is the answer.
+ * 	 2) checkforFilledInAndNeighborsCount
+ * 		- This searches for words with one empty space
+ * 		- Compares this word with our dictionary to aggregate possible solutions
+ * 		- Next, it narrows down the solutions by getting rid of solutions which attempt
+ * 		  to use characters already in the solution set
+ * 		- If there's just ONE solution, then it is the answer.
+ * 	 3) checkforContractionsCount
+ * 		- Searches for words that are contractions
+ * 		- Compares this word with our dictionary to aggregate possible solutions
+ * 		- Next, it narrows down the solutions by getting rid of solutions which attempt
+ * 		  to use characters already in the solution set
+ * 		- If there's just ONE solution, then it is the answer.
+ * 	 4) checkforTwoAndSearchCount
+ * 		- Searches for words with two empty spaces
+ * 		
+ * 
+ * 
+ * **/
 // Solves the puzzles
 
 package application.model;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.swing.plaf.synth.SynthSpinnerUI;
+import java.util.Arrays;
 
 public class Solver {
 	Dictionary dict;     // Solver has a dictionary
@@ -24,7 +46,7 @@ public class Solver {
 	int checkforFilledInAndNeighborsCount = 0;
 	int checkforContractionsCount = 0;
 	int checkforTwoAndSearchCount = 0;
-	
+
 	// Copies from currQ
 	ArrayList<String> cryptoWords = new ArrayList<String>();  // Cryptotext beneath the quote
 	ArrayList<String> hiddenTokens = new ArrayList<String>(); // Half-filled Tokens of words in puzzle *Needs to be updated each time*
@@ -54,7 +76,7 @@ public class Solver {
 		}
 
 		collectCharsFound(this.currSolution);
-		
+
 	}
 
 	/** Updates the list of characters found in solution **/
@@ -102,16 +124,16 @@ public class Solver {
 			if(c == '_')
 				count++;
 		}
-		
+
 		return count;
 	}
-	
+
 	/** Returns true or false if a word is very similar to the other **/
 	public boolean isaMatch(String p, String d) {
-		
+
 		// Assume its a match
 		boolean match = true;
-		
+
 		// If the lengths aren't the same this won't work so return false
 		if(p.length() != d.length())
 			return false;
@@ -125,37 +147,38 @@ public class Solver {
 				}
 			}
 		}
-		
+
 		return match;
 	}
-	
+
 	/** Given a string, returns a list of indices where empty spots are found "_" **/
 	public ArrayList<Integer> returnPos (String s) {
-		
+
+		// Array with possible indices
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 
+		// Find empty spots
 		for(int i = 0; i < s.length(); i++) {
-			//foundAMatch = true;
 			if(s.charAt(i) == '_') {
 				indices.add(i);
 			}
 		}
 
-		return null;
+		return indices;
 	}
 
 	/** Returns a list of words the same length of string from the dictionary **/
 	public ArrayList<String> sameLengthList (String s) {
-		
+
 		ArrayList<String> sameLen = new ArrayList<String>();
-		
+
 		// Compare current word to our dictionary
 		for(Word w: this.dict.getVocabulary()) {
 
 			// If this word is the same length...
 			if(s.length() == w.getWordLen()) 
 				sameLen.add(w.getWord());
-			
+
 		}
 
 		return sameLen;
@@ -183,14 +206,14 @@ public class Solver {
 
 			// Get number of empty spaces
 			int count = numOfEmptySpaces(s);
-			
+
 			// This word is mostly filled out so let's narrow it down; exclude one letter charas
 			if( (count == 1) && (s.length() > 1)) {
-				
+
 				// Get list of words the same length
 				ArrayList<String> sameLen = new ArrayList<String>();
 				sameLen = sameLengthList(s);
-				
+
 				// For words of the same length compare if they're very similar
 				for(String d: sameLen) {
 					// If the words are very similar...
@@ -199,7 +222,7 @@ public class Solver {
 						matchesFound++;
 					}
 				}
-			
+
 			}
 			// Here we'll just deal with cases where only one match is found
 			if(matchesFound == 1) {
@@ -270,16 +293,16 @@ public class Solver {
 				// Get list of words the same length
 				ArrayList<String> sameLen = new ArrayList<String>();
 				sameLen = sameLengthList(s);
-				
+
 				// For words of the same length compare if they're very similar
 				for(String d: sameLen) {
 					// If the words are very similar...
 					if(isaMatch(s, d)) {
-						
+
 						matchStrs.add(d);
 					}
 				}
-			
+
 			}
 			if(!matchStrs.isEmpty()) {
 				// Characters go here
@@ -324,9 +347,9 @@ public class Solver {
 					updateHiddenTokens();
 					// Update chars found
 					collectCharsFound(this.currSolution);
-
+					// Update count
 					checkforFilledInAndNeighborsCount++;
-
+					// Print to console
 					System.out.println("");
 					System.out.println(this.currSolution);
 					System.out.println(this.currCrypto);
@@ -360,6 +383,7 @@ public class Solver {
 			// If the word contains an apostrophe and there is at least one empty space...
 			if(s.contains("'") && count > 0)
 				contractionFound = true;
+			
 
 			// This word is mostly filled out so let's narrow it down
 			if(contractionFound) {
@@ -369,12 +393,13 @@ public class Solver {
 
 					// If this word is the same length...
 					if(s.length() == w.getWordLen() && w.isAContraction) {
+						// Assumed until proven false
 						foundAMatch = true;
-						
+
 						// Get list of words the same length
 						ArrayList<String> sameLen = new ArrayList<String>();
 						sameLen = sameLengthList(s);
-						
+
 						// For words of the same length compare if they're very similar
 						for(String d: sameLen) {
 							// If the words are very similar...
@@ -383,37 +408,47 @@ public class Solver {
 							}
 						}
 						
+
+
 						// An almost perfect match is found
 						if(foundAMatch) {
-							System.out.println(s + " wowah " + w.getWord());
+							
 							char ans = ' ';
 							char crypto = ' ';
 							for(int i = 0; i< s.length(); i++) {
 								if(s.charAt(i) == '_') {
 
 									/* UPDATES WHEN ANSWER FOUND */
-
+									
 									ans = w.getWord().charAt(i);
 									crypto = this.cryptoWords.get(index).charAt(i);
+									
+									// Check if the possible answer is already in solution set
+									if(charsFound.contains(String.valueOf(ans))) {
+										foundAMatch = false;
+										break;
+									}
 
 									// Update current solution
 									this.currSolution = Quote.updatePuzzle(ans, crypto, currQ, currSolution);
 								}
 							}
+							
+							// Update only if not false
+							if(foundAMatch) {
+								/* UPDATES WHEN ANSWER FOUND */
 
-							/* UPDATES WHEN ANSWER FOUND */
-
-							// Update hiddenTokens
-							updateHiddenTokens();
-							// Update chars found
-							collectCharsFound(this.currSolution);
-
-							checkforContractionsCount++;
-
-							System.out.println("");
-							System.out.println(this.currSolution);
-							System.out.println(this.currCrypto);
-
+								// Update hiddenTokens
+								updateHiddenTokens();
+								// Update chars found
+								collectCharsFound(this.currSolution);
+								// Update count
+								checkforContractionsCount++;
+								// Print to console
+								System.out.println("");
+								System.out.println(this.currSolution);
+								System.out.println(this.currCrypto);
+							}
 						}							
 					}
 
@@ -459,6 +494,8 @@ public class Solver {
 					}
 				}
 
+				
+				
 				// Compare current word to our dictionary
 				for(Word w: this.dict.getVocabulary()) {
 
@@ -496,26 +533,29 @@ public class Solver {
 							String temp = Quote.updatePuzzle(alphaPos1, crypto1, currQ, currSolution);						
 							temp = Quote.updatePuzzle(alphaPos2, crypto2, currQ, temp);
 
-							// Assumes string generated (temp) is not a possible answer until proven
-							boolean isPossible= false;
+							// Assumes string generated (temp) is a possible answer until proven otherwise
+							boolean isPossible= true;
 
 							// Tokenize possible string
 							ArrayList<String> tempStrings = new ArrayList<String>();
 							Quote.collectTokens(temp, tempStrings);
-							int numofWordinQuote = tempStrings.size();
-							int numofWordinQuoteMatches = 0;
+						
+							// Verify each word; an array of 0's corresponding to each word
+							// As each word is found to be a possible legitimate word change to true (1)
+							int [] verifyStrings = new int[tempStrings.size()]; 
+							Arrays.fill(verifyStrings, 0); // Initially false
 
 							// Check if each word is actually a word (ie in our dictionary)
+							int tokenIndx = 0;
 							for(String token: tempStrings) {
-								int dictIndx = 0;
+								
 								for(Word d1: this.dict.vocabulary) {
-
 
 									// First find words of same length	
 									if(token.length() == d1.getWordLen()) {
+										// Assume true
 										boolean possibleWord = true;
-
-										int charIndx = 0;
+										
 										char [] tokenChArr = token.toCharArray();
 
 										// Compare character by character, excluding anything but letters
@@ -530,30 +570,35 @@ public class Solver {
 											}
 										}
 
-										// If this is still true
-										if(possibleWord) {
-											numofWordinQuoteMatches++;
-										}
+										// If this is a word
+										if(possibleWord) 
+											verifyStrings[tokenIndx] = 1;
 									}
 								}
+								
+								tokenIndx++;
+							}
+							
+							// Check if the array has any 0's; if so, not a viable solution
+							for(int n: verifyStrings) {
+								if(n == 0)
+									isPossible = false;
 							}
 
 							// If each word has some match in the dictionary....
-							if(numofWordinQuoteMatches == tempStrings.size()) {
+							if(isPossible) {
 								foundAMatch = true;
 								/* UPDATES WHEN ANSWER FOUND */
 
 								// Update current solution
 								this.currSolution = temp;
-
 								// Update hiddenTokens
 								updateHiddenTokens();
-
 								// Update chars found
 								collectCharsFound(this.currSolution);
-
+								// Update count
 								checkforTwoAndSearchCount++;
-
+								// Print to console
 								System.out.println("");
 								System.out.println(this.currSolution);
 								System.out.println(this.currCrypto);
