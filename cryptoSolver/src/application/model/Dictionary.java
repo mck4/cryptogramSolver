@@ -8,34 +8,31 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Dictionary {
-	// Hard-coding some rules any human would know
-	final String [] oneLetterWords = {"A", "I"};
-	final String [] twoLetterWords = {"AM", "AN", "AS", "AT", "BE", "BY", "DO", "GO", 
-									  "HE", "IF", "IN", "IS", "IT", "ME", "MY", "NO", 
-									  "OF", "ON", "OR", "SO", "TO", "UP", "US", "WE"};
+	// Variables
 	final String [] mostFrequentLetters = {"E", "T", "A", "O", "I", "N"};
-	final String [] contractionEnds = {"T", "S", "D", "M", "RE", "VE", "LL"};
-	 
+	final String [] contractionEnds = {"T", "S", "D", "M", "RE", "VE", "LL"}; 
+
+	// Vocabulary
 	ArrayList<Word> vocabulary = new ArrayList<Word>();
-	ArrayList<Word> threeLetterWords = new ArrayList<Word>();
-	
+	ArrayList<String> vocabString = new ArrayList<String>();
+
+
 	/** Constructor **/
 	public Dictionary(ArrayList<Word> vocab) {
 		this.vocabulary = vocab;
 		getThreeLetterWords();
-		//System.out.println(vocab);
 	}
-	
+
 	/** Builds a vocabulary using the words already existing inside the quotes **/
 	public static ArrayList<Word> getVocabulary(ArrayList<Quote> quotes) {
 		// Deal directly with Strings first
 		ArrayList<String> strV = new ArrayList<String>();
-		
+
 		// For each quote
 		for(Quote q: quotes) {
 			// Split the quotes into individual words
 			String [] words = q.getQuote().split(" ");
-					
+
 			// Get rid of unnecessary punctuation
 			for(int i = 0; i < words.length; i++) {
 				words[i] = words[i].replaceAll("[,?!.;\"]", "");
@@ -44,35 +41,32 @@ public class Dictionary {
 					strV.add(words[i]);
 			}
 		}
-		
+
 		Collections.sort(strV); // Sort
 		ArrayList<Word> vocab = new ArrayList<Word>(strV.size()); // Create the AL to return
-		
+
 		// Build Word AL
 		for(String w: strV){
 			Word word = new Word(w);
 			vocab.add(word);
 		}
-		
+
 		return vocab;
 	}
-	
-	public void getThreeLetterWords(){
-		for(Word w: this.vocabulary) {
-			if(w.getWordLen() == 3)
-				threeLetterWords.add(w);
-		}
-		Collections.sort(threeLetterWords);
-		//System.out.println(threeLetterWords);
+
+	/** Get String version of vocabulary **/
+	public void getThreeLetterWords() {
+
+		// For each wordcc
+		for(Word w: this.vocabulary) 
+			vocabString.add(w.getWord());
+
+		// Sort
+		Collections.sort(vocabString);
+
 	}
 
-	public String[] getOneLetterWords() {
-		return oneLetterWords;
-	}
-
-	public String[] getTwoLetterWords() {
-		return twoLetterWords;
-	}
+	/** GETTERS AND SETTERS **/
 
 	public String[] getMostFrequentLetters() {
 		return mostFrequentLetters;
@@ -90,8 +84,12 @@ public class Dictionary {
 		this.vocabulary = vocabulary;
 	}
 
-	public void setThreeLetterWords(ArrayList<Word> threeLetterWords) {
-		this.threeLetterWords = threeLetterWords;
+	public ArrayList<String> getVocabString() {
+		return vocabString;
+	}
+
+	public void setVocabString(ArrayList<String> vocabString) {
+		this.vocabString = vocabString;
 	}
 
 }

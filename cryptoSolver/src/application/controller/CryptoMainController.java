@@ -41,40 +41,41 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	public static Dictionary dictionary;
 	public static int difficultyMode = easy; // 1 - Easy, 2 - Medium, 3 - Hard
 	public static String mem = "";
-	
+
 	// Counts
 	int checkForFilledInOne = 0, checkForFilledInOneCount = 0;
 	int checkforFilledInOneAndNeighbors = 0, checkforFilledInOneAndNeighborsCount = 0;
 	int checkforContractions = 0, checkforContractionsCount = 0;
 	int checkforTwoAndSearch = 0, checkforTwoAndSearchCount = 0;
-	
+	int checkForCryptoPatternsTwo = 0, checkForCryptoPatternsTwoCount = 0;
+
 	ArrayList<String> comboBoxChoices = new ArrayList<String>();
 
-	
+
 	/**  This method loads automatically when program is run **/
 	public void initialize() {
-		
+
 		postitnote.setBackground(null);
-		
+
 		// Combo box display
 		comboBoxChoices.addAll(Arrays.asList("Easy", "Medium", "Hard", "Solution"));
 		choices.setItems(FXCollections.observableArrayList(comboBoxChoices));
 		choices.getSelectionModel().selectFirst();
-	
+
 		// Load puzzles
 		PuzzleBox puzzlebox = new PuzzleBox("quotes/new_quotes.txt");
-		
+
 		// Load dictionary & add vocab from the puzzles
 		dictionary = new Dictionary(Dictionary.getVocabulary(puzzlebox.getQuotePuzzles()));
-			
+
 		// Adds the buttons linking to the puzzles dynamically
 		int puzzleNum = 1;
-		
+
 		for(Quote q: puzzlebox.getQuotePuzzles()) {
-			
+
 			// Create a new button
 			Button newLabel = new Button();
-			
+
 			// Set look of the button
 			newLabel.setStyle("-fx-border-color:  #b8860b;");
 			newLabel.setMaxWidth(155);
@@ -83,161 +84,201 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			newLabel.setMinHeight(40);
 			newLabel.setPadding(new javafx.geometry.Insets(2.0, 5.0, 2.0, 5.0));
 			newLabel.setAlignment(Pos.BASELINE_LEFT);
-			
+
 			// Set button text
 			newLabel.setText("Puzzle #" +  puzzleNum + "\n" + q.getAuthor());
-			
+
 			// Right text is changed when the button is clicked
 			String puzzleNumstr = "Puzzle #" + puzzleNum;
-			
+
 			// Actions when button is pressed
 			newLabel.setOnAction(value -> { // Reset combo box choice to first one
-											choices.getSelectionModel().selectFirst(); 
-											// Generate new solver with new puzzle
-											solver = null;
-											solver = new Solver(dictionary, q, easy); 
-											// Display on GUI
-											displaynum.setText(puzzleNumstr);
-											display.setText(solver.getCurrSolution());
-											displaycrypto.setText(q.getCryptoQuote());
-											displayauthor.setText(q.getAuthor());
-											postitnote.setText("");
-											postitnote.setBackground(null);
-											// Display on console
-											System.out.println("");
-											System.out.println(puzzleNumstr);
-											System.out.println(solver.getCurrSolution());
-											System.out.println(q.getCryptoQuote());
-											// Reset
-											checkForFilledInOneCount = -1;
-											checkforFilledInOneAndNeighborsCount = -1;
-											mem = "";
-											// Set as current Quote
-											currentQ = q; });
+				choices.getSelectionModel().selectFirst(); 
+				// Generate new solver with new puzzle
+				solver = null;
+				solver = new Solver(dictionary, q, easy); 
+				// Display on GUI
+				displaynum.setText(puzzleNumstr);
+				display.setText(solver.getCurrSolution());
+				displaycrypto.setText(q.getCryptoQuote());
+				displayauthor.setText(q.getAuthor());
+				postitnote.setText("");
+				postitnote.setBackground(null);
+				// Display on console
+				System.out.println("");
+				System.out.println(puzzleNumstr);
+				System.out.println(solver.getCurrSolution());
+				System.out.println(q.getCryptoQuote());
+				System.out.println("\t\t\t-" + q.getAuthor());
+				// Reset
+				checkforFilledInOneAndNeighborsCount = 0;
+				checkForFilledInOneCount = 0;
+				checkforContractionsCount = 0;
+				checkforTwoAndSearchCount = 0;
+				mem = "";
+				// Set as current Quote
+				currentQ = q; });
 			// Add button to display
 			VBox.setMargin(newLabel, new Insets(0.5,0,0.5,0));
 			VBox.setVgrow(newLabel, Priority.ALWAYS);
 			puzzles.getChildren().add(newLabel);
 			puzzleNum++;
-			
+
 			if (puzzlebox.getQuotePuzzles().indexOf(q) == 19)
 				break;
 		}
-		
-	
+
+
 	}
-	
+
 
 	/** Method when difficulty on combobox is selected **/
 	@FXML
-    void cbxChoice(ActionEvent event) {
+	void cbxChoice(ActionEvent event) {
 		// String value of combo box choice
 		String difficulty = choices.getSelectionModel().selectedItemProperty().getValue();
-		
+
 		// Set difficulty based on choice
 		if(difficulty.equals("Easy")) {
 			display.setText(currentQ.getqEasy());
 			difficultyMode = easy; // easy
 			solver = null;
 			solver = new Solver(dictionary, currentQ, easy);
+			checkforFilledInOneAndNeighborsCount = 0;
+			checkForFilledInOneCount = 0;
+			checkforContractionsCount = 0;
+			checkforTwoAndSearchCount = 0;
 		}
 		else if (difficulty.equals("Medium")){
 			display.setText(currentQ.getqMed());
 			difficultyMode = medium; // medium
 			solver = null;
 			solver = new Solver(dictionary, currentQ, medium);
+			checkforFilledInOneAndNeighborsCount = 0;
+			checkForFilledInOneCount = 0;
+			checkforContractionsCount = 0;
+			checkforTwoAndSearchCount = 0;
 		}
 		else if (difficulty.equals("Hard")){
 			display.setText(currentQ.getqHard());
 			difficultyMode = hard; // hard
 			solver = null;
 			solver = new Solver(dictionary, currentQ, hard);
+			checkforFilledInOneAndNeighborsCount = 0;
+			checkForFilledInOneCount = 0;
+			checkforContractionsCount = 0;
+			checkforTwoAndSearchCount = 0;
 		}
 		else { // Solution
 			display.setText(currentQ.getQuote());
+			checkforFilledInOneAndNeighborsCount = 0;
+			checkForFilledInOneCount = 0;
+			checkforContractionsCount = 0;
+			checkforTwoAndSearchCount = 0;
 		}
 
-    }
+	}
 
 	/** Method to handle ... **/
 	@Override
 	public void handle(ActionEvent event) {
 
-		if(solver == null)
+		// If a puzzle isn't loaded, next does nothing and returns
+		if( solver == null )
 			return;
-		
-		if(solver.isSolved()){
+
+		// Check if it's solved
+		if( solver.isSolved() ){
 			postitnote.setText("Puzzle is solved!");
-			System.out.println("Puzzle is solved!");
+			System.out.println("\nPUZZLE IS SOLVED!!");
 			return;
 		}
-		
+
 		// First method
-		if((checkForFilledInOneCount < checkForFilledInOne) || (checkForFilledInOneCount == 0)) {
-			
+		if( (checkForFilledInOneCount <= checkForFilledInOne) || (checkForFilledInOneCount == 0) ) {
+
 			checkForFilledInOne = solver.checkforFilledInOne();
 			checkForFilledInOneCount++;  // Increment
-			
+
 			// Update displays
-			display.setText(solver.getCurrSolution());
-			String msg = "Here we check for words with one blank, compare with our dictionary and find only 1 solution possible, prioritizing larger words " + checkForFilledInOne + " time(s).";
-			postitnote.setText(msg);
-			
-			if(checkForFilledInOne != 0 && (!mem.equals(msg))) {
-				System.out.println(msg);
-				mem = msg;
+			if( checkForFilledInOne != 0 ) {
+
+				display.setText(solver.getCurrSolution());
+				String msg = "Here we check for words with one blank, compare with our dictionary and find only 1 solution possible, prioritizing larger words " + checkForFilledInOne + " time(s).";
+				postitnote.setText(msg);
+
+				if(!mem.equals(msg)) {
+					System.out.println(msg);
+					mem = msg;
+				}
 			}
-			
-		
+			else
+				postitnote.setText("Keep Clicking");
+
 		}
 		// Second method
-		else if (checkforFilledInOneAndNeighborsCount <= checkforFilledInOneAndNeighbors ) {
-			
+		else if ( checkforFilledInOneAndNeighborsCount <= checkforFilledInOneAndNeighbors ) {
+
 			checkforFilledInOneAndNeighbors = solver.checkforFilledInOneAndNeighbors();
 			checkforFilledInOneAndNeighborsCount++; // Increment
-			
+
 			// Update displays
-			display.setText(solver.getCurrSolution());
-			String msg = "Again check for words with one blank, and consider words with multiple solutions but narrow down the solutions looking at neighboring chars " + checkforFilledInOneAndNeighbors + " time(s).";
-			postitnote.setText(msg);			
-			
-			if(!mem.equals(msg)) {
-				System.out.println(msg);
-				mem = msg;
+			if( checkforFilledInOneAndNeighbors != 0 ) {
+
+				display.setText(solver.getCurrSolution());
+				String msg = "Again check for words with one blank, and consider words with multiple solutions but narrow down the solutions looking at neighboring chars " + checkforFilledInOneAndNeighbors + " time(s).";
+				postitnote.setText(msg);			
+
+				if(!mem.equals(msg)) {
+					System.out.println(msg);
+					mem = msg;
+				}
 			}
-	
+			else
+				postitnote.setText("Keep Clicking");
+
 		}
 		// Third method
-		else if(checkforContractionsCount <= checkforContractions ) {
-			
+		else if( checkforContractionsCount <= checkforContractions ) {
+
 			checkforContractions = solver.checkforContractions();
 			checkforContractionsCount++;
 
 			// Update displays
-			display.setText(solver.getCurrSolution());
-			String msg = "Check for contractions " + checkforContractions + " time(s).";
-			postitnote.setText(msg);			
+			if( checkforContractions != 0 ) {
 
-			if(!mem.equals(msg)) {
-				System.out.println(msg);
-				mem = msg;
-			 }
+				display.setText(solver.getCurrSolution());
+				String msg = "Check for contractions " + checkforContractions + " time(s).";
+				postitnote.setText(msg);
+
+				if(!mem.equals(msg)) {
+					System.out.println(msg);
+					mem = msg;
+				}
+			}
+			else
+				postitnote.setText("Keep Clicking");
 		}
-		else if (checkforTwoAndSearchCount <= checkforTwoAndSearch ){
-			
+		// Fourth method
+		else if ( checkforTwoAndSearchCount <= checkforTwoAndSearch ) {
+
 			checkforTwoAndSearch = solver.checkforTwoAndSearch();
 			checkforTwoAndSearchCount++;
-			
+
 			// Update displays
-			display.setText(solver.getCurrSolution());
-			String msg = "Two and search";
-			postitnote.setText(msg);	
-			
-			if(!mem.equals(msg)) {
-				System.out.println(msg);
-				mem = msg;
-			 }
-			
+			if( checkforTwoAndSearch != 0 ) {
+
+				display.setText(solver.getCurrSolution());
+				String msg = "Check for two empty spaces and search " + checkforTwoAndSearch + " time(s).";
+				postitnote.setText(msg);	
+
+				if(!mem.equals(msg)) {
+					System.out.println(msg);
+					mem = msg;
+				}
+			}
+			else
+				postitnote.setText("Keep Clicking");
 		}
 		else {	
 			checkforFilledInOneAndNeighborsCount = 0;
@@ -246,6 +287,6 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			checkforTwoAndSearchCount = 0;
 		}
 	}
-	
-	
+
+
 }
