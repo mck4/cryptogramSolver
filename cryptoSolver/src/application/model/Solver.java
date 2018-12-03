@@ -382,19 +382,7 @@ public class Solver {
 								foundAMatch = false;
 							}
 						}
-						/*foundAMatch = true;
-
-
-						// Look for words that might be a match
-						for(int i = 0; i < s.length(); i++) {
-							if(Character.isLetter(s.charAt(i))){
-								if(s.charAt(i) != w.getWord().charAt(i)) {
-									foundAMatch = false;
-									break;
-								}
-							}
-						}*/
-
+						
 						// An almost perfect match is found
 						if(foundAMatch) {
 							System.out.println(s + " wowah " + w.getWord());
@@ -543,8 +531,9 @@ public class Solver {
 										}
 
 										// If this is still true
-										if(possibleWord) 
+										if(possibleWord) {
 											numofWordinQuoteMatches++;
+										}
 									}
 								}
 							}
