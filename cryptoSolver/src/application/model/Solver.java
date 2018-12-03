@@ -6,25 +6,28 @@
  * 		- This searches for words with one empty space
  * 		- Compares this word with our dictionary to aggregate possible solutions
  * 		- If there's just ONE solution, then it is the answer.
- * 	 2) checkforFilledInAndNeighborsCount
+ * 	 2) checkforFilledInAndNeighbors
  * 		- This searches for words with one empty space
  * 		- Compares this word with our dictionary to aggregate possible solutions
  * 		- Next, it narrows down the solutions by getting rid of solutions which attempt
  * 		  to use characters already in the solution set
  * 		- If there's just ONE solution, then it is the answer.
- * 	 3) checkforContractionsCount
+ * 	 3) checkforContractions
  * 		- Searches for words that are contractions
  * 		- Compares this word with our dictionary to aggregate possible solutions
  * 		- Next, it narrows down the solutions by getting rid of solutions which attempt
  * 		  to use characters already in the solution set
  * 		- If there's just ONE solution, then it is the answer.
- * 	 4) checkforTwoAndSearchCount
+ * 	 4) checkforTwoAndSearch
  * 		- Searches for words with two empty spaces
- * 		
- * 
+ * 		- Compares this word with our dictionary to aggregate possible solutions
+ * 		- Narrows down solutions by checking the possible solutions effect on neighboring words
+ * 			- Does it produce words that are actually words?
+ * 			- Each word in the new possible solution is checked.
+ * 			- If each word passes this test, a solution is found 
  * 
  * **/
-// Solves the puzzles
+
 
 package application.model;
 import java.util.ArrayList;
@@ -383,7 +386,7 @@ public class Solver {
 			// If the word contains an apostrophe and there is at least one empty space...
 			if(s.contains("'") && count > 0)
 				contractionFound = true;
-			
+
 
 			// This word is mostly filled out so let's narrow it down
 			if(contractionFound) {
@@ -407,22 +410,22 @@ public class Solver {
 								foundAMatch = false;
 							}
 						}
-						
+
 
 
 						// An almost perfect match is found
 						if(foundAMatch) {
-							
+
 							char ans = ' ';
 							char crypto = ' ';
 							for(int i = 0; i< s.length(); i++) {
 								if(s.charAt(i) == '_') {
 
 									/* UPDATES WHEN ANSWER FOUND */
-									
+
 									ans = w.getWord().charAt(i);
 									crypto = this.cryptoWords.get(index).charAt(i);
-									
+
 									// Check if the possible answer is already in solution set
 									if(charsFound.contains(String.valueOf(ans))) {
 										foundAMatch = false;
@@ -433,7 +436,7 @@ public class Solver {
 									this.currSolution = Quote.updatePuzzle(ans, crypto, currQ, currSolution);
 								}
 							}
-							
+
 							// Update only if not false
 							if(foundAMatch) {
 								/* UPDATES WHEN ANSWER FOUND */
@@ -494,8 +497,8 @@ public class Solver {
 					}
 				}
 
-				
-				
+
+
 				// Compare current word to our dictionary
 				for(Word w: this.dict.getVocabulary()) {
 
@@ -539,7 +542,7 @@ public class Solver {
 							// Tokenize possible string
 							ArrayList<String> tempStrings = new ArrayList<String>();
 							Quote.collectTokens(temp, tempStrings);
-						
+
 							// Verify each word; an array of 0's corresponding to each word
 							// As each word is found to be a possible legitimate word change to true (1)
 							int [] verifyStrings = new int[tempStrings.size()]; 
@@ -548,14 +551,14 @@ public class Solver {
 							// Check if each word is actually a word (ie in our dictionary)
 							int tokenIndx = 0;
 							for(String token: tempStrings) {
-								
+
 								for(Word d1: this.dict.vocabulary) {
 
 									// First find words of same length	
 									if(token.length() == d1.getWordLen()) {
 										// Assume true
 										boolean possibleWord = true;
-										
+
 										char [] tokenChArr = token.toCharArray();
 
 										// Compare character by character, excluding anything but letters
@@ -575,10 +578,10 @@ public class Solver {
 											verifyStrings[tokenIndx] = 1;
 									}
 								}
-								
+
 								tokenIndx++;
 							}
-							
+
 							// Check if the array has any 0's; if so, not a viable solution
 							for(int n: verifyStrings) {
 								if(n == 0)

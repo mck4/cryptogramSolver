@@ -1,4 +1,10 @@
-/** Dictionary.java **/
+/** Dictionary.java 
+ * 
+ * Contains the actual vocabulary as well
+ * as other lists of information our program
+ * may use to solve the puzzles
+ * 
+ * **/
 // Has vocabulary and information on words
 
 package application.model;
@@ -75,7 +81,7 @@ public class Dictionary {
 	public String[] getContractionEnds() {
 		return contractionEnds;
 	}
-
+ 
 	public ArrayList<Word> getVocabulary() {
 		return vocabulary;
 	}

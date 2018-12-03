@@ -1,5 +1,11 @@
-/** CryptoMainController.java **/
-// Controller for CryptoMain.fxml
+/** CryptoMainController.java 
+ * 
+ * Controller for CryptoMain.fxml
+ * 
+ * Keeps a count of the times a method is used.
+ * 
+ * **/
+
 
 package application.controller;
 
@@ -49,6 +55,7 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 	int checkforTwoAndSearch = 0, checkforTwoAndSearchCount = 0;
 	int checkForCryptoPatternsTwo = 0, checkForCryptoPatternsTwoCount = 0;
 
+	// Combobox
 	ArrayList<String> comboBoxChoices = new ArrayList<String>();
 
 

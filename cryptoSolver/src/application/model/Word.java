@@ -1,5 +1,12 @@
-/** Word.java **/
-// Has info on each word
+/** Word.java 
+ * 
+ * Contains information on each word such as:
+ * 	- its length
+ * 	- the actual word as a String
+ * 	- is it a contraction?
+ * 
+ * **/
+
 
 package application.model;
 
@@ -13,6 +20,8 @@ public class Word implements Comparable<Word> {
 	public Word(String word) {
 		this.word = word;
 		this.wordLen = word.length();
+		
+		// Checks if it's a contraction
 		if(this.word.contains("'"))
 			this.isAContraction = true;
 	}

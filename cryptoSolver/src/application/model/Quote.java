@@ -1,5 +1,19 @@
-/** Quote.java **/
-// Has info on each quote puzzle
+/** Quote.java
+ * 
+ * Contains information on each quote such as:
+ * 	- The string itself
+ * 	- The author
+ * 	- the string as its crypto version
+ * 
+ * However, it also includes versions of the quote
+ * as easy, medium and hard puzzles.
+ * 
+ * In addition it also has the character frequency of each
+ * character in the quote and the key which converts alpha letters
+ * to crypto letters and vice versa
+ *  
+ *  **/
+
 
 package application.model;
 

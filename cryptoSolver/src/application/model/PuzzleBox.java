@@ -1,5 +1,10 @@
-/** PuzzleBox.java **/
-// Contains a list of quote puzzles
+/** PuzzleBox.java
+ * 
+ * This parses the quote's textfile, creating the actual
+ * list of possible puzzles.
+ * 
+ *  **/
+
 
 package application.model;
 
@@ -25,7 +30,7 @@ public class PuzzleBox {
 			while (infile.hasNext()) {
 				// Parse
 				String line = infile.nextLine();
-				String [] tokens = line.split("\\|");
+				String [] tokens = line.split("\\|");	// Quotes are delimited with the '|' character
 				
 				// Create new Quote
 				Quote newQuote = new Quote(tokens[0].toUpperCase(), tokens[1]);
@@ -42,5 +47,9 @@ public class PuzzleBox {
 	
 	public ArrayList<Quote> getQuotePuzzles(){
 		return this.quotePuzzles;
+	}
+
+	public void setQuotePuzzles(ArrayList<Quote> quotePuzzles) {
+		this.quotePuzzles = quotePuzzles;
 	}
 }
