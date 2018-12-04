@@ -113,7 +113,7 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 				postitnote.setBackground(null);
 				// Display on console
 				System.out.println("");
-				System.out.println(puzzleNumstr);
+				System.out.println(puzzleNumstr + " (easy)");
 				System.out.println(solver.getCurrSolution());
 				System.out.println(q.getCryptoQuote());
 				System.out.println("\t\t\t-" + q.getAuthor());
@@ -155,6 +155,13 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			checkForFilledInOneCount = 0;
 			checkforContractionsCount = 0;
 			checkforTwoAndSearchCount = 0;
+			
+			// Display on console
+			System.out.println("");
+			System.out.println(displaynum.getText() + " (easy)");
+			System.out.println(solver.getCurrSolution());
+			System.out.println(currentQ.getCryptoQuote());
+			System.out.println("\t\t\t-" + currentQ.getAuthor());
 		}
 		else if (difficulty.equals("Medium")){
 			display.setText(currentQ.getqMed());
@@ -165,6 +172,13 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			checkForFilledInOneCount = 0;
 			checkforContractionsCount = 0;
 			checkforTwoAndSearchCount = 0;
+			
+			// Display on console
+			System.out.println("");
+			System.out.println(displaynum.getText()  + " (medium)");
+			System.out.println(solver.getCurrSolution());
+			System.out.println(currentQ.getCryptoQuote());
+			System.out.println("\t\t\t-" + currentQ.getAuthor());
 		}
 		else if (difficulty.equals("Hard")){
 			display.setText(currentQ.getqHard());
@@ -175,6 +189,13 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			checkForFilledInOneCount = 0;
 			checkforContractionsCount = 0;
 			checkforTwoAndSearchCount = 0;
+			
+			// Display on console
+			System.out.println("");
+			System.out.println(displaynum.getText() + " (hard)");
+			System.out.println(solver.getCurrSolution());
+			System.out.println(currentQ.getCryptoQuote());
+			System.out.println("\t\t\t-" + currentQ.getAuthor());
 		}
 		else { // Solution
 			display.setText(currentQ.getQuote());
@@ -182,6 +203,13 @@ public class CryptoMainController implements EventHandler<ActionEvent> {
 			checkForFilledInOneCount = 0;
 			checkforContractionsCount = 0;
 			checkforTwoAndSearchCount = 0;
+			
+			// Display on console
+			System.out.println("");
+			System.out.println(solver.getCurrSolution());
+			System.out.println(solver.getCurrSolution());
+			System.out.println(currentQ.getCryptoQuote());
+			System.out.println("\t\t\t-" + currentQ.getAuthor());
 		}
 
 	}
